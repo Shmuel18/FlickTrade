@@ -4,7 +4,11 @@ Debug script to check what markets are available from Polymarket API
 """
 import requests
 import json
-from config import GAMMA_API_URL
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from polymarket_bot.config import GAMMA_API_URL
 
 def debug_scan():
     url = f"{GAMMA_API_URL}/events?active=true&closed=false&limit=500"

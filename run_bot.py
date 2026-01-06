@@ -1,42 +1,34 @@
 #!/usr/bin/env python3
 """
-Direct bot runner - no terminal dependencies
+Polymarket Arbitrage Bot - Main Entry Point
+Professional launcher for the trading bot
 """
-import subprocess
+
 import sys
 import os
+import asyncio
+from pathlib import Path
 
-# Get script directory
-script_dir = os.path.dirname(os.path.abspath(__file__))
+# Get project root
+project_root = Path(__file__).parent
+src_path = str(project_root / 'src')
 
-# The bot directory
-bot_dir = os.path.join(script_dir, "polymarket_bot")
+# Add src to Python path
+if src_path not in sys.path:
+    sys.path.insert(0, src_path)
 
-print("="*70)
-print("POLYMARKET ARBITRAGE BOT - DIRECT LAUNCHER")
-print("="*70)
-print(f"Script Location: {script_dir}")
-print(f"Bot Location: {bot_dir}")
-print(f"Python Executable: {sys.executable}")
-print()
+# Set environment variables for paths
+os.environ['BOT_ROOT'] = str(project_root)
+os.environ['BOT_CONFIG_DIR'] = str(project_root / 'config')
+os.environ['BOT_LOG_DIR'] = str(project_root / 'logs')
 
+# Import and run bot
 try:
-    # Change to bot directory
-    os.chdir(bot_dir)
-    print(f"[INFO] Changed to: {os.getcwd()}")
-    print()
-    
-    # Run the main script
-    print("[RUN] Starting bot...\n")
-    result = subprocess.run([sys.executable, "main.py"], check=False)
-    
-    if result.returncode == 0:
-        print("\n[SUCCESS] Bot completed normally")
-    else:
-        print(f"\n[ERROR] Bot exited with code {result.returncode}")
-        
+    from polymarket_bot.main import main
+    if __name__ == '__main__':
+        asyncio.run(main())
+except KeyboardInterrupt:
+    print("\nBot stopped by user")
 except Exception as e:
-    print(f"[FATAL] {e}")
-    import traceback
-    traceback.print_exc()
+    print(f"Error: {e}")
     sys.exit(1)

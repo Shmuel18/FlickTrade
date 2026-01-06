@@ -1,9 +1,0 @@
-2026-01-07 01:08:00,616 - __main__ - INFO - 
-==================================================
-2026-01-07 01:08:00,737 - __main__ - INFO - Start Time: 2026-01-07 01:08:00
-2026-01-07 01:08:00,737 - __main__ - INFO - ==================================================
-
-2026-01-07 01:08:00,743 - scanner - INFO - Scanning Gamma API: https://gamma-api.polymarket.com/events?active=true&closed=false&limit=500
-2026-01-07 01:08:03,038 - scanner - INFO - Total hierarchical markets found: 0
-2026-01-07 01:08:03,056 - __main__ - WARNING - No hierarchical markets found
-2026-01-07 01:08:03,057 - __main__ - ERROR - Failed to scan markets on startup

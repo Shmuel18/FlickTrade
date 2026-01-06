@@ -3,7 +3,7 @@ import requests
 import re
 import logging
 from typing import Dict, List, Optional, Any
-from config import GAMMA_API_URL, MAX_RETRIES, RETRY_DELAY
+from .config import GAMMA_API_URL, MAX_RETRIES, RETRY_DELAY
 import time
 
 logger = logging.getLogger(__name__)
@@ -60,8 +60,9 @@ def extract_clob_token_id(market: Dict[str, Any]) -> Optional[str]:
 def scan_polymarket_for_hierarchical_markets(retry_count: int = 0) -> Dict[str, Any]:
     """Scan Gamma API for hierarchical/threshold-based markets.
     
-    Hierarchical markets: Event with multiple threshold conditions
-    (e.g., "BTC > 100k", "BTC > 105k", "BTC > 110k")
+    Hierarchical markets are identified by:
+    1. Events with multiple markets (e.g., different dates/thresholds)
+    2. Markets that share similar questions with different parameters
     
     Args:
         retry_count: Internal retry counter
@@ -104,36 +105,47 @@ def scan_polymarket_for_hierarchical_markets(retry_count: int = 0) -> Dict[str, 
             event_title = event.get('title', '')
             markets = event.get("markets", [])
             
+            # Only process events with 2+ markets (these are hierarchical by definition)
             if len(markets) < 2:
                 continue
 
-            threshold_markets = []
+            market_pairs = []
+            
+            # Extract token IDs for all markets in the event
             for market in markets:
                 question = market.get('question', '')
+                cond_id = market.get('conditionId', '')
                 
-                # Look for threshold indicators
-                if not any(indicator in question.lower() for indicator in ['above', '>', 'over']):
-                    continue
+                # Get token IDs (can be string or list)
+                token_ids_raw = market.get('clobTokenIds', [])
+                if not token_ids_raw:
+                    token_ids_raw = market.get('clobTokenId', [])
                 
-                threshold = extract_price_threshold(question)
-                token_id = extract_clob_token_id(market)
-
-                if threshold is not None and token_id:
-                    threshold_markets.append({
-                        "threshold": threshold,
-                        "clob_token_id": token_id,
-                        "title": question
+                # Ensure it's a list
+                if isinstance(token_ids_raw, str):
+                    token_ids = [token_ids_raw]
+                elif isinstance(token_ids_raw, list):
+                    token_ids = [str(t) for t in token_ids_raw if t]
+                else:
+                    token_ids = []
+                
+                if token_ids:
+                    market_pairs.append({
+                        "question": question,
+                        "conditionId": cond_id,
+                        "clobTokenId": token_ids[0],  # Use first token ID
+                        "clobTokenIds": token_ids
                     })
-
-            # Only include events with 2+ threshold markets
-            if len(threshold_markets) >= 2:
-                threshold_markets.sort(key=lambda x: x['threshold'])
+            
+            # If we have 2+ markets with token IDs, it's hierarchical
+            if len(market_pairs) >= 2:
                 hierarchical_markets[event_title] = {
-                    "clob_token_ids": [m["clob_token_id"] for m in threshold_markets],
-                    "thresholds": [m["threshold"] for m in threshold_markets],
-                    "market_count": len(threshold_markets)
+                    "clob_token_ids": [m["clobTokenId"] for m in market_pairs],
+                    "questions": [m["question"] for m in market_pairs],
+                    "market_count": len(market_pairs),
+                    "all_token_ids": [m["clobTokenIds"] for m in market_pairs]
                 }
-                logger.info(f"Found hierarchical market: {event_title} ({len(threshold_markets)} thresholds)")
+                logger.info(f"Found hierarchical market: {event_title} ({len(market_pairs)} markets)")
                 
         except Exception as e:
             logger.warning(f"Error processing event {event.get('title', 'unknown')}: {e}")

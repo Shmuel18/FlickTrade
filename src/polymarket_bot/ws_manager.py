@@ -4,7 +4,7 @@ import websockets
 import json
 import logging
 from typing import Callable, Dict, Optional, List, Any
-from config import CLOB_WS_URL, WS_PING_INTERVAL, WS_PING_TIMEOUT, MAX_RETRIES
+from .config import CLOB_WS_URL, WS_PING_INTERVAL, WS_PING_TIMEOUT, MAX_RETRIES
 
 logger = logging.getLogger(__name__)
 
@@ -155,8 +155,10 @@ class WebSocketManager:
         """Properly close WebSocket connection."""
         if self.ws:
             try:
-                await self.ws.close()
+                await asyncio.wait_for(self.ws.close(), timeout=2.0)
                 logger.info("WebSocket closed")
+            except asyncio.TimeoutError:
+                logger.warning("WebSocket close timeout")
             except Exception as e:
                 logger.error(f"Error closing WebSocket: {e}")
             finally:

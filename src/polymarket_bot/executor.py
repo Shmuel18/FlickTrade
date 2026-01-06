@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from py_clob_client.client import ClobClient
 from py_clob_client.clob_types import ApiCreds
-from config import (
+from .config import (
     CLOB_URL, API_KEY, API_SECRET, API_PASSPHRASE, PRIVATE_KEY, 
     CHAIN_ID, MAX_USDC_ALLOCATION
 )

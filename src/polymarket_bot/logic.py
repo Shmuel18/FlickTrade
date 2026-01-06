@@ -1,7 +1,7 @@
 # logic.py
 import logging
 from typing import List, Dict, Any, Optional
-from config import PROFIT_THRESHOLD
+from .config import PROFIT_THRESHOLD
 
 logger = logging.getLogger(__name__)
 

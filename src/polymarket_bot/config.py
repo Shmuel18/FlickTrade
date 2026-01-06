@@ -5,7 +5,10 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 # Load environment variables
-env_path = Path(__file__).parent.parent / ".env"
+env_path = Path(__file__).parent.parent.parent / "config" / ".env"
+if not env_path.exists():
+    # Fallback to root
+    env_path = Path(__file__).parent.parent.parent / ".env"
 load_dotenv(env_path)
 
 # API Configuration
@@ -40,11 +43,14 @@ API_RATE_LIMIT_DELAY = 1  # seconds between API calls
 MARKET_SCAN_INTERVAL = 3600  # 1 hour in seconds
 
 # Logging Configuration
+log_file = Path(__file__).parent.parent.parent / "logs" / "polymarket_bot.log"
+log_file.parent.mkdir(parents=True, exist_ok=True)
+
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('polymarket_bot.log', encoding='utf-8'),
+        logging.FileHandler(str(log_file), encoding='utf-8'),
         logging.StreamHandler()
     ]
 )

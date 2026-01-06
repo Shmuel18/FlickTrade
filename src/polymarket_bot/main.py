@@ -6,11 +6,11 @@ import sys
 from datetime import datetime
 from typing import Dict, List, Optional, Set
 
-from scanner import scan_polymarket_for_hierarchical_markets
-from ws_manager import WebSocketManager
-from logic import check_arbitrage
-from executor import OrderExecutor
-from config import MARKET_SCAN_INTERVAL
+from .scanner import scan_polymarket_for_hierarchical_markets
+from .ws_manager import WebSocketManager
+from .logic import check_arbitrage
+from .executor import OrderExecutor
+from .config import MARKET_SCAN_INTERVAL
 
 logger = logging.getLogger(__name__)
 
@@ -24,13 +24,14 @@ class PolymarketBot:
         self.active_pairs: List[Dict] = []
         self.subscribed_tokens: Set[str] = set()
         self.last_scan_time = 0
+        self.running = True
+        self.shutdown_event = asyncio.Event()
         self.stats = {
             'opportunities_found': 0,
             'trades_executed': 0,
             'total_pnl': 0.0,
             'price_updates': 0
         }
-        self.running = True
     
     async def on_price_update(self, token_id: str, price: float) -> None:
         """Handle incoming price update from WebSocket.
@@ -129,11 +130,18 @@ class PolymarketBot:
         """Periodically scan for new markets (every hour)."""
         while self.running:
             try:
-                await asyncio.sleep(MARKET_SCAN_INTERVAL)
-                logger.info("[RESCAN] Periodic market update...")
-                await self.scan_and_subscribe()
+                await asyncio.wait_for(asyncio.sleep(MARKET_SCAN_INTERVAL), timeout=MARKET_SCAN_INTERVAL + 1)
+            except asyncio.TimeoutError:
+                pass
             except asyncio.CancelledError:
                 break
+            
+            if not self.running:
+                break
+                
+            try:
+                logger.info("[RESCAN] Periodic market update...")
+                await self.scan_and_subscribe()
             except Exception as e:
                 logger.error(f"[ERROR] Rescan loop: {e}")
     
@@ -141,21 +149,28 @@ class PolymarketBot:
         """Periodically report bot statistics."""
         while self.running:
             try:
-                await asyncio.sleep(300)  # Report every 5 minutes
+                await asyncio.wait_for(asyncio.sleep(300), timeout=301)  # Report every 5 minutes
+            except asyncio.TimeoutError:
+                pass
+            except asyncio.CancelledError:
+                break
+            
+            if not self.running:
+                break
+                
+            try:
                 logger.info(
                     f"[STATS] Updates: {self.stats['price_updates']} | "
                     f"Opportunities: {self.stats['opportunities_found']} | "
                     f"Trades: {self.stats['trades_executed']} | "
                     f"P&L: ${self.stats['total_pnl']:.2f}"
                 )
-            except asyncio.CancelledError:
-                break
             except Exception as e:
                 logger.error(f"[ERROR] Stats loop: {e}")
     
     def shutdown(self, signum, frame) -> None:
         """Handle shutdown signal gracefully."""
-        logger.info("[SHUTDOWN] Signal received")
+        logger.info("\n[SHUTDOWN] Ctrl+C detected - cleaning up...")
         self.running = False
     
     async def run(self) -> None:
@@ -167,6 +182,7 @@ class PolymarketBot:
         logger.info("\n" + "="*60)
         logger.info("[START] POLYMARKET ARBITRAGE BOT")
         logger.info(f"[TIME] {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        logger.info("[INFO] Press Ctrl+C to stop")
         logger.info("="*60 + "\n")
         
         # Initial market scan
@@ -174,18 +190,39 @@ class PolymarketBot:
             logger.error("Failed to scan markets on startup")
             return
         
-        # Start concurrent tasks
-        tasks = [
-            asyncio.create_task(self.market_monitoring_loop()),
-            asyncio.create_task(self.periodic_rescan_loop()),
-            asyncio.create_task(self.stats_reporter_loop())
-        ]
+        # Create tasks with proper cancellation handling
+        monitor_task = None
+        rescan_task = None
+        stats_task = None
         
         try:
-            await asyncio.gather(*tasks, return_exceptions=True)
+            monitor_task = asyncio.create_task(self.market_monitoring_loop())
+            rescan_task = asyncio.create_task(self.periodic_rescan_loop())
+            stats_task = asyncio.create_task(self.stats_reporter_loop())
+            
+            # Main loop - check if running every 100ms
+            while self.running:
+                await asyncio.sleep(0.1)
+                
+            # If we exit the loop, shutdown was signaled
+            logger.info("[SHUTDOWN] Shutting down tasks...")
+            
         except KeyboardInterrupt:
-            logger.info("Keyboard interrupt received")
+            logger.info("[SHUTDOWN] Keyboard interrupt")
+            self.running = False
         finally:
+            # Ensure all tasks are cancelled
+            self.running = False
+            
+            tasks_to_cancel = [t for t in [monitor_task, rescan_task, stats_task] if t]
+            for task in tasks_to_cancel:
+                if not task.done():
+                    task.cancel()
+            
+            # Wait for cancellation
+            if tasks_to_cancel:
+                await asyncio.gather(*tasks_to_cancel, return_exceptions=True)
+            
             await self.cleanup()
     
     async def cleanup(self) -> None:
