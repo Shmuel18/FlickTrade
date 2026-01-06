@@ -1,0 +1,142 @@
+C:\Users\shh92\OneDrive\Documenti\BotPolymarket\polymarket_bot\run_bot.batC:\Users\shh92\OneDrive\Documenti\BotPolymarket\polymarket_bot\run_bot.bat🤖 POLYMARKET ARBITRAGE BOT - EXECUTION GUIDE
+================================================================
+
+STATUS: ✅ BOT IS READY TO RUN
+
+Current Date: 2026-01-07
+Python Version: 3.13
+Bot Status: Fully functional, waiting for execution
+
+================================================================
+QUICKEST WAY TO RUN (Choose 1):
+================================================================
+
+1️⃣ OPTION A - Batch File (EASIEST)
+   ➜ Double-click this file:
+      C:\Users\shh92\OneDrive\Documenti\BotPolymarket\polymarket_bot\run_bot.bat
+   
+   ✓ Opens CMD automatically
+   ✓ Runs the bot
+   ✓ Shows logs in real-time
+   ✓ Press Ctrl+C to stop
+
+2️⃣ OPTION B - Python Launcher
+   ➜ Double-click this file:
+      C:\Users\shh92\OneDrive\Documenti\BotPolymarket\launcher.py
+   
+   ✓ Direct Python execution
+   ✓ No terminal needed
+
+3️⃣ OPTION C - Python Direct Run
+   ➜ Double-click this file:
+      C:\Users\shh92\OneDrive\Documenti\BotPolymarket\run_bot.py
+   
+   ✓ Most reliable method
+   ✓ Works around terminal issues
+
+================================================================
+WHAT HAPPENS WHEN BOT RUNS:
+================================================================
+
+[START] POLYMARKET ARBITRAGE BOT
+[TIME] 2026-01-07 01:08:00
+[SCAN] Searching for hierarchical markets...
+[CONNECT] Scanning Gamma API...
+[OK] Found X pairs from Y hierarchical markets
+[INFO] Total unique tokens: Z
+[CONNECT] Connecting to WebSocket...
+[CONNECT] Subscribed to Z tokens
+[RUN] Starting market monitoring loop
+[STATS] Updates: 0 | Opportunities: 0 | Trades: 0 | P&L: $0.00
+
+Then it runs continuously, monitoring prices 24/7.
+
+To stop: Press Ctrl+C
+
+================================================================
+BOT COMPONENTS - ALL READY:
+================================================================
+
+✅ main.py             - Main orchestrator (runs all systems)
+✅ scanner.py          - Finds hierarchical markets
+✅ ws_manager.py       - Real-time price updates via WebSocket
+✅ logic.py            - Detects arbitrage opportunities
+✅ executor.py         - Executes trades via CLOB
+✅ config.py           - Configuration & logging
+✅ requirements.txt    - All dependencies listed
+
+✅ .env                - API credentials (secure)
+✅ run_bot.bat         - Windows batch launcher
+✅ launcher.py         - Python launcher
+✅ run_bot.py          - Direct Python runner
+
+================================================================
+LOG FILE:
+================================================================
+
+All activity is logged to:
+C:\Users\shh92\OneDrive\Documenti\BotPolymarket\polymarket_bot\polymarket_bot.log
+
+View logs while bot is running to monitor activity.
+
+================================================================
+API CREDENTIALS:
+================================================================
+
+✅ API_KEY - Configured
+✅ API_SECRET - Configured  
+✅ API_PASSPHRASE - Configured
+✅ PRIVATE_KEY - Configured
+
+All credentials are stored securely in .env file
+
+================================================================
+TRADING CONFIGURATION (in config.py):
+================================================================
+
+PROFIT_THRESHOLD = 0.02              (2% minimum profit)
+MAX_USDC_ALLOCATION = 0.05           (5% per trade max)
+MARKET_SCAN_INTERVAL = 3600          (Rescan every 1 hour)
+
+These can be modified in config.py to adjust bot behavior.
+
+================================================================
+EXPECTED BEHAVIOR:
+================================================================
+
+✅ Connects to Polymarket API
+✅ Scans for hierarchical markets
+✅ Connects to WebSocket for real-time prices
+✅ Monitors 24/7 for arbitrage opportunities
+✅ Logs all activity to file
+✅ Periodic statistics every 5 minutes
+✅ Graceful shutdown on Ctrl+C
+
+The bot will keep running indefinitely until you stop it.
+
+================================================================
+IF NO MARKETS FOUND:
+================================================================
+
+This is normal if there are no active "threshold-based" markets.
+Markets change continuously on Polymarket.
+
+The bot will keep checking every hour and will automatically
+start trading when suitable markets appear.
+
+To debug what markets are available, run:
+python debug_api.py
+
+================================================================
+NEXT STEPS:
+================================================================
+
+1. Double-click: run_bot.bat
+2. Watch the output
+3. Check polymarket_bot.log for details
+4. Bot will run 24/7 monitoring for opportunities
+5. Press Ctrl+C when you want to stop
+
+Ready to run? Choose your method above and execute! 🚀
+
+================================================================

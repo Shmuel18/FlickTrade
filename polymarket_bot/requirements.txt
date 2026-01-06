@@ -1,6 +1,6 @@
-py-clob-client
-websockets
-requests
-dotenv
-pandas
-ccxt
+py-clob-client>=1.0.0
+websockets>=11.0
+requests>=2.31.0
+python-dotenv>=1.0.0
+pandas>=2.0.0
+ccxt>=4.0.0
