@@ -10,6 +10,7 @@ from .scanner import scan_polymarket_for_hierarchical_markets
 from .ws_manager import WebSocketManager
 from .logic import check_arbitrage
 from .executor import OrderExecutor
+from .persistence import TransactionLogger, PerformanceMonitor
 from .config import MARKET_SCAN_INTERVAL
 
 logger = logging.getLogger(__name__)
@@ -20,6 +21,8 @@ class PolymarketBot:
     def __init__(self):
         self.ws = WebSocketManager()
         self.executor: Optional[OrderExecutor] = None
+        self.transaction_logger = TransactionLogger()  # CSV logging
+        self.performance_monitor = PerformanceMonitor(self.transaction_logger)
         self.current_prices: Dict[str, float] = {}
         self.price_timestamps: Dict[str, float] = {}  # Track price freshness
         self.active_pairs: List[Dict] = []
@@ -127,8 +130,15 @@ class PolymarketBot:
                     profit = opportunity['profit_margin'] * order_size
                     self.stats['total_pnl'] += profit
                     logger.info(f"✅ [SUCCESS] Trade executed! Estimated profit: ${profit:.4f}")
+                    
+                    # Log to CSV for persistence
+                    if self.executor and hasattr(self.executor, 'transactions'):
+                        for tx in self.executor.transactions.values():
+                            self.transaction_logger.log_transaction(tx, opportunity)
+                            self.performance_monitor.session_stats['trades_successful'] += 1
                 else:
                     logger.warning(f"⚠️ [FAILED] Trade execution failed for {event_id}")
+                    self.performance_monitor.session_stats['trades_attempted'] += 1
             else:
                 logger.warning("[WARNING] Executor not initialized - opportunity logged only")
                 
@@ -242,6 +252,10 @@ class PolymarketBot:
                     f"Trades: {self.stats['trades_executed']} | "
                     f"P&L: ${self.stats['total_pnl']:.2f}"
                 )
+                # Log to CSV for persistence
+                self.performance_monitor.session_stats['price_updates'] = self.stats['price_updates']
+                self.performance_monitor.session_stats['opportunities_found'] = self.stats['opportunities_found']
+                self.performance_monitor.session_stats['total_pnl'] = self.stats['total_pnl']
             except Exception as e:
                 logger.error(f"[ERROR] Stats loop: {e}")
     
@@ -307,13 +321,9 @@ class PolymarketBot:
         logger.info("[CLEANUP] Closing connections...")
         await self.ws.close()
         
-        logger.info(
-            f"\n[FINAL STATS]\n"
-            f"  Price Updates: {self.stats['price_updates']}\n"
-            f"  Opportunities Found: {self.stats['opportunities_found']}\n"
-            f"  Trades Executed: {self.stats['trades_executed']}\n"
-            f"  Total P&L: ${self.stats['total_pnl']:.2f}\n"
-        )
+        # Generate final performance report
+        self.performance_monitor.report()
+        
         logger.info("[DONE] Bot shutdown complete")
 
 
