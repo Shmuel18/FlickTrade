@@ -139,9 +139,21 @@ def scan_polymarket_for_hierarchical_markets(retry_count: int = 0) -> Dict[str, 
                 if not token_ids_raw:
                     token_ids_raw = market.get('clobTokenId', [])
                 
-                # Ensure it's a list
+                # Debug: Check what we got from API
+                logger.debug(f"[DEBUG] Market: {question[:50]}...")
+                logger.debug(f"[DEBUG] token_ids_raw type: {type(token_ids_raw)}, value: {str(token_ids_raw)[:200]}")
+                
+                # Ensure it's a list - handle JSON strings from API
                 if isinstance(token_ids_raw, str):
-                    token_ids = [token_ids_raw]
+                    try:
+                        import json
+                        parsed = json.loads(token_ids_raw)
+                        if isinstance(parsed, list):
+                            token_ids = [str(t) for t in parsed if t]
+                        else:
+                            token_ids = [token_ids_raw] if token_ids_raw else []
+                    except (json.JSONDecodeError, TypeError):
+                        token_ids = [token_ids_raw] if token_ids_raw else []
                 elif isinstance(token_ids_raw, list):
                     token_ids = [str(t) for t in token_ids_raw if t]
                 else:

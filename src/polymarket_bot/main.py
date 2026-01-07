@@ -3,6 +3,7 @@ import asyncio
 import logging
 import signal
 import sys
+import websockets
 from datetime import datetime
 from typing import Dict, List, Optional, Set
 
@@ -20,7 +21,7 @@ class PolymarketBot:
     
     def __init__(self):
         self.ws = WebSocketManager()
-        self.executor: Optional[OrderExecutor] = None
+        self.executor = OrderExecutor()  # Initialize the executor for trade execution
         self.transaction_logger = TransactionLogger()  # CSV logging
         self.performance_monitor = PerformanceMonitor(self.transaction_logger)
         self.current_prices: Dict[str, float] = {}
@@ -91,7 +92,7 @@ class PolymarketBot:
                 if easy_price_data and hard_price_data:
                     age_easy = current_time - easy_price_data
                     age_hard = current_time - hard_price_data
-                    max_price_age = 10  # seconds
+                    max_price_age = 60  # seconds (increased from 10 for political markets)
                     
                     if age_easy > max_price_age or age_hard > max_price_age:
                         logger.warning(f"[SKIP] Prices too stale. Easy: {age_easy:.1f}s, Hard: {age_hard:.1f}s")
@@ -168,7 +169,14 @@ class PolymarketBot:
                 token_ids = market_data.get("clob_token_ids", [])
                 all_tokens_list = market_data.get("all_token_ids", [])
                 
-                # Create pairs for consecutive thresholds
+                # Debug: Check data types
+                logger.debug(f"[DEBUG] Event: {event_title}")
+                logger.debug(f"[DEBUG] token_ids type: {type(token_ids)}, value: {token_ids[:2] if token_ids else 'empty'}")
+                logger.debug(f"[DEBUG] all_tokens_list type: {type(all_tokens_list)}, len: {len(all_tokens_list)}")
+                if all_tokens_list:
+                    logger.debug(f"[DEBUG] all_tokens_list[0] type: {type(all_tokens_list[0])}, value: {all_tokens_list[0]}")
+                
+                # Create pairs from hierarchical markets
                 for i in range(len(token_ids) - 1):
                     pair = {
                         'event_title': event_title,
@@ -178,8 +186,45 @@ class PolymarketBot:
                         'child_all_tokens': all_tokens_list[i + 1] if i + 1 < len(all_tokens_list) else []
                     }
                     self.active_pairs.append(pair)
-                    new_tokens.add(token_ids[i])
-                    new_tokens.add(token_ids[i + 1])
+                    # Subscribe to ALL tokens for each market (YES + NO)
+                    if i < len(all_tokens_list) and all_tokens_list[i]:
+                        # Handle case where all_tokens_list[i] might be a string representation of a list
+                        tokens_to_add = all_tokens_list[i]
+                        if isinstance(tokens_to_add, str):
+                            # Check if it's a JSON array string
+                            if tokens_to_add.startswith('[') and tokens_to_add.endswith(']'):
+                                try:
+                                    import json
+                                    tokens_to_add = json.loads(tokens_to_add)
+                                except (json.JSONDecodeError, TypeError):
+                                    logger.warning(f"Failed to parse tokens string: {tokens_to_add[:100]}")
+                                    continue
+                        if isinstance(tokens_to_add, list):
+                            new_tokens.update(tokens_to_add)
+                        elif isinstance(tokens_to_add, str):
+                            # Single token
+                            new_tokens.add(tokens_to_add)
+                        else:
+                            logger.warning(f"Unexpected token format: {type(tokens_to_add)} - {tokens_to_add[:100] if isinstance(tokens_to_add, str) else tokens_to_add}")
+                    
+                    if i + 1 < len(all_tokens_list) and all_tokens_list[i + 1]:
+                        tokens_to_add = all_tokens_list[i + 1]
+                        if isinstance(tokens_to_add, str):
+                            # Check if it's a JSON array string
+                            if tokens_to_add.startswith('[') and tokens_to_add.endswith(']'):
+                                try:
+                                    import json
+                                    tokens_to_add = json.loads(tokens_to_add)
+                                except (json.JSONDecodeError, TypeError):
+                                    logger.warning(f"Failed to parse tokens string: {tokens_to_add[:100]}")
+                                    continue
+                        if isinstance(tokens_to_add, list):
+                            new_tokens.update(tokens_to_add)
+                        elif isinstance(tokens_to_add, str):
+                            # Single token
+                            new_tokens.add(tokens_to_add)
+                        else:
+                            logger.warning(f"Unexpected token format: {type(tokens_to_add)} - {tokens_to_add[:100] if isinstance(tokens_to_add, str) else tokens_to_add}")
             
             logger.info(
                 f"[OK] Found {len(self.active_pairs)} pairs from {len(markets)} hierarchical markets"
@@ -204,14 +249,33 @@ class PolymarketBot:
             return False
     
     async def market_monitoring_loop(self) -> None:
-        """Main monitoring loop - checks for market updates."""
-        try:
-            logger.info("[RUN] Starting market monitoring loop")
-            await self.ws.receive_data(self.on_price_update)
-        except asyncio.CancelledError:
-            logger.info("[INFO] Market monitoring cancelled")
-        except Exception as e:
-            logger.error(f"[ERROR] Monitoring loop: {e}")
+        """Main monitoring loop - checks for market updates with reconnection."""
+        while self.running:
+            try:
+                logger.info("[RUN] Starting market monitoring loop")
+                
+                # Ensure we have an active WebSocket connection
+                if self.ws.ws is None:
+                    logger.info("[RECONNECT] WebSocket not connected, attempting to reconnect...")
+                    if not await self.ws.connect():
+                        logger.error("[ERROR] Failed to reconnect WebSocket, waiting 30 seconds...")
+                        await asyncio.sleep(30)
+                        continue
+                
+                # Start receiving data
+                await self.ws.receive_data(self.on_price_update)
+                
+            except asyncio.CancelledError:
+                logger.info("[INFO] Market monitoring cancelled")
+                break
+            except websockets.exceptions.ConnectionClosed:
+                logger.warning("[WEBSOCKET] Connection closed, will attempt reconnection...")
+                self.ws.ws = None  # Reset connection
+                await asyncio.sleep(5)  # Brief pause before reconnect
+            except Exception as e:
+                logger.error(f"[ERROR] Monitoring loop: {e}")
+                self.ws.ws = None  # Reset connection on any error
+                await asyncio.sleep(10)  # Wait before retry
     
     async def periodic_rescan_loop(self) -> None:
         """Periodically scan for new markets (every hour)."""
