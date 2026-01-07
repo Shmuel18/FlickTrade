@@ -3,11 +3,13 @@
 ## Transaction CSV Logging
 
 All executed arbitrage trades are automatically logged to:
+
 ```
 logs/transactions.csv
 ```
 
 ### CSV Columns:
+
 - `timestamp` - When the trade was executed
 - `event_title` - Market event name
 - `easy_condition_id` - Parent/easy condition token
@@ -28,6 +30,7 @@ logs/transactions.csv
 The bot generates performance reports at shutdown showing:
 
 ### Session Statistics:
+
 - Duration in hours
 - Total price updates received
 - Total opportunities detected
@@ -35,13 +38,16 @@ The bot generates performance reports at shutdown showing:
 - Session P&L (Profit & Loss)
 
 ### Historical Statistics (from CSV):
+
 - Total transactions executed
 - Success rate percentage
 - Estimated cumulative profit
 - Average profit per trade
 
 ### Accessing Reports:
+
 Reports are logged to console at:
+
 1. **Every 5 minutes** - Interim stats
 2. **On shutdown** - Comprehensive performance report
 
@@ -61,17 +67,22 @@ print(f"Total Profit: ${stats['estimated_total_profit']:.2f}")
 ## Future Enhancements
 
 ### 1. Async CLOB Client
+
 Currently uses `py_clob_client` with `asyncio.to_thread` wrapper.
 Future: Replace with fully async HTTP library (aiohttp) for better resource efficiency.
 
 ### 2. SQLite Database
+
 Could migrate from CSV to SQLite for:
+
 - Better query performance
 - Complex filtering and sorting
 - Real-time analytics dashboards
 
 ### 3. Alert Notifications
+
 Could add:
+
 - Email alerts for large trades
 - Slack notifications for errors
 - Webhook integration for external monitoring
