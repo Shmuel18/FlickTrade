@@ -18,7 +18,7 @@ def main():
     print("🧪 בדיקת הסורק...")
     print("=" * 60)
     print("מחפש שווקי קריפטו עם:")
-    print("  ✓ מחיר 0.01-0.10 (או 0.992-0.996)")
+    print("  ✓ מחיר 0.01-0.10 (או 0.990-0.999)")
     print("  ✓ לפחות 8 שעות עד סגירה")
     print("  ✓ קטגוריית קריפטו")
     print("=" * 60)
@@ -29,7 +29,7 @@ def main():
     opportunities = scan_extreme_price_markets(
         min_hours_until_close=8,
         low_price_threshold=0.10,
-        high_price_threshold=0.992,
+        high_price_threshold=0.990,
         focus_crypto=True
     )
     

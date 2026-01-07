@@ -29,7 +29,7 @@ The bot only trades markets that meet:
 
 - ✅ Crypto category (Bitcoin, Ethereum, etc.)
 - ✅ At least **8 hours** until market closes
-- ✅ Price: 0.01-0.10 or 0.992-0.996 (fractional cents only)
+- ✅ Price: 0.01-0.10 or 0.990-0.999 (fractional cents only)
 
 ## 📦 Installation
 

@@ -6,6 +6,6 @@ echo.
 echo Starting bot...
 echo.
 
-python run_simple_bot.py
+.venv\Scripts\python.exe run_simple_bot.py
 
 pause

@@ -98,8 +98,8 @@ class SimpleCryptoBot:
                 # סרוק שווקים
                 opportunities = scan_extreme_price_markets(
                     min_hours_until_close=8,      # לפחות 8 שעות עד סגירה
-                    low_price_threshold=0.10,     # עד 10 סנט
-                    high_price_threshold=0.992,   # מעל 99.2 סנט (שברי סנט מ-100%)
+                    max_entry_price=0.004,        # קנה עד 0.4 סנט
+                    exit_multiplier=2.0,          # מכור ב-X2 (0.8 סנט)
                     focus_crypto=True             # קריפטו בלבד
                 )
                 
