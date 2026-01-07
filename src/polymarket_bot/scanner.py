@@ -2,6 +2,7 @@
 import requests
 import re
 import logging
+from datetime import datetime, timezone, timedelta
 from typing import Dict, List, Optional, Any
 from .config import GAMMA_API_URL, MAX_RETRIES, RETRY_DELAY
 import time
@@ -29,8 +30,7 @@ def extract_price_threshold(question: str) -> Optional[float]:
         if 'k' in clean_q[match.start():match.end()+1] and val < 1000:
             val *= 1000
         return val
-    except (ValueError, AttributeError) as e:
-        logger.debug(f"Failed to extract threshold from '{question}': {e}")
+    except (ValueError, AttributeError):
         return None
 
 def get_question_direction(question: str) -> Optional[str]:
@@ -88,8 +88,12 @@ def scan_polymarket_for_hierarchical_markets(retry_count: int = 0) -> Dict[str, 
     """
     url = f"{GAMMA_API_URL}/events?active=true&closed=false&limit=1000"
     
+    # פילטר זמן: רק שווקים שנסגרים תוך 24 שעות
+    now = datetime.now(timezone.utc)
+    max_expiry = now + timedelta(hours=24)
+    
     try:
-        logger.info(f"Scanning Gamma API: {url} (limit=1000 for wider coverage)")
+        logger.info(f"Scanning Gamma API: {url} (24h filter active)")
         response = requests.get(url, timeout=10)
         response.raise_for_status()
         events = response.json()
@@ -118,6 +122,16 @@ def scan_polymarket_for_hierarchical_markets(retry_count: int = 0) -> Dict[str, 
     
     for event in events:
         try:
+            # בדיקת תאריך סיום - דילוג על שווקים רחוקים
+            end_date_str = event.get('endDate')
+            if end_date_str:
+                try:
+                    end_date = datetime.fromisoformat(end_date_str.replace('Z', '+00:00'))
+                    if end_date > max_expiry:
+                        continue  # מדלג על שווקים שנסגרים אחרי 24 שעות
+                except (ValueError, TypeError):
+                    pass  # אם אין תאריך תקין, נמשיך בכל זאת
+            
             event_title = event.get('title', '')
             markets = event.get("markets", [])
             
@@ -138,10 +152,6 @@ def scan_polymarket_for_hierarchical_markets(retry_count: int = 0) -> Dict[str, 
                 token_ids_raw = market.get('clobTokenIds', [])
                 if not token_ids_raw:
                     token_ids_raw = market.get('clobTokenId', [])
-                
-                # Debug: Check what we got from API
-                logger.debug(f"[DEBUG] Market: {question[:50]}...")
-                logger.debug(f"[DEBUG] token_ids_raw type: {type(token_ids_raw)}, value: {str(token_ids_raw)[:200]}")
                 
                 # Ensure it's a list - handle JSON strings from API
                 if isinstance(token_ids_raw, str):
@@ -174,7 +184,6 @@ def scan_polymarket_for_hierarchical_markets(retry_count: int = 0) -> Dict[str, 
                                       if str(o).strip().lower() == "yes")
                         if 0 <= yes_idx < len(token_ids):
                             yes_token = token_ids[yes_idx]
-                            logger.debug(f"Found YES token at index {yes_idx} via outcomes")
                     except StopIteration:
                         pass
                 
@@ -182,10 +191,8 @@ def scan_polymarket_for_hierarchical_markets(retry_count: int = 0) -> Dict[str, 
                 if not yes_token:
                     if len(token_ids) >= 2:
                         yes_token = token_ids[1]  # Usually YES is second
-                        logger.debug(f"Using fallback: token_ids[1] as YES")
                     elif len(token_ids) == 1:
                         yes_token = token_ids[0]
-                        logger.debug(f"Single token - using token_ids[0]")
                 
                 if yes_token and direction:
                     market_pairs.append({

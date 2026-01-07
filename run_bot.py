@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Polymarket Arbitrage Bot - Main Entry Point
-Professional launcher for the trading bot
+Professional launcher for the trading bot with optimized logging
 """
 
 import sys
@@ -26,9 +26,16 @@ os.environ['BOT_LOG_DIR'] = str(project_root / 'logs')
 try:
     from polymarket_bot.main import main
     if __name__ == '__main__':
+        print("\n" + "="*70)
+        print("  🤖 POLYMARKET ARBITRAGE BOT - OPTIMIZED MODE")
+        print("="*70)
+        print("  ✅ Reduced logging to prevent system overload")
+        print("  ✅ Log rotation enabled (max 20MB total)")
+        print("  ✅ Only INFO and higher messages shown")
+        print("="*70 + "\n")
         asyncio.run(main())
 except KeyboardInterrupt:
-    print("\nBot stopped by user")
+    print("\n✋ Bot stopped by user")
 except Exception as e:
-    print(f"Error: {e}")
+    print(f"❌ Error: {e}")
     sys.exit(1)

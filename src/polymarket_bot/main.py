@@ -7,6 +7,7 @@ import websockets
 from datetime import datetime
 from typing import Dict, List, Optional, Set
 
+from .logging_config import setup_logging
 from .scanner import scan_polymarket_for_hierarchical_markets
 from .ws_manager import WebSocketManager
 from .logic import check_arbitrage
@@ -31,6 +32,7 @@ class PolymarketBot:
         self.last_scan_time = 0
         self.running = True
         self.shutdown_event = asyncio.Event()
+        self._show_dry_run = False  # Set to True to see what trades would be made
         # State machine to prevent duplicate trades
         self.last_trade_attempt: Dict[str, float] = {}  # event_id -> timestamp
         self.trade_cooldown = 60  # seconds between trades on same event
@@ -38,7 +40,9 @@ class PolymarketBot:
             'opportunities_found': 0,
             'trades_executed': 0,
             'total_pnl': 0.0,
-            'price_updates': 0
+            'price_updates': 0,
+            'missed_no_balance': 0,  # Track missed opportunities
+            'total_missed_profit': 0.0
         }
     
     async def on_price_update(self, token_id: str, price: float) -> None:
@@ -73,7 +77,7 @@ class PolymarketBot:
             if pair_key in self.last_trade_attempt:
                 time_since_last = current_time - self.last_trade_attempt[pair_key]
                 if time_since_last < self.trade_cooldown:
-                    logger.debug(f"[SKIP] {event_id} pair - Cooldown active ({time_since_last:.0f}s ago)")
+                    # Skip silently - no need to log every cooldown
                     return
             
             logger.info(
@@ -104,24 +108,56 @@ class PolymarketBot:
                 # Calculate order size with proper cap
                 await self.executor.get_usdc_balance()
                 
-                max_usdc_per_trade = self.executor.usdc_balance * 0.1  # 10% max per trade
+                # Check if we have real balance (not default)
+                # Don't fetch every time - use cached value from startup
+                if not hasattr(self.executor, '_balance_is_real') or not self.executor._balance_is_real or self.executor.usdc_balance <= 5.0:
+                    # Track missed opportunity
+                    self.stats['missed_no_balance'] += 1
+                    estimated_investment = 5.0  # Minimum
+                    estimated_profit = opportunity['profit_margin'] * (estimated_investment / opportunity['easy_price'])
+                    self.stats['total_missed_profit'] += estimated_profit
+                    
+                    # Show missed info occasionally (not every time to reduce logs)
+                    if self.stats['missed_no_balance'] % 10 == 1:  # Every 10th opportunity
+                        logger.warning(f"⚠️ Balance too low - skipping trade")
+                        logger.info(f"   💡 [MISSED] Could have made ${estimated_profit:.4f} ({opportunity['profit_pct']:.2f}%)")
+                        logger.info(f"   💡 Total missed so far: {self.stats['missed_no_balance']} opportunities, ${self.stats['total_missed_profit']:.2f} potential profit")
+                    return
+                
+                # Risk management: 1% of portfolio per trade (conservative)
+                max_usdc_per_trade = self.executor.usdc_balance * 0.01  # 1% per trade
                 min_usdc_per_trade = 5.0  # $5 minimum (Polymarket requires min 5 shares)
-                max_position_cap = 50.0  # $50 hard cap per trade
+                max_position_cap = 20.0  # $20 hard cap per trade (lower risk)
                 
-                usdc_to_use = min(max_usdc_per_trade, self.executor.usdc_balance, max_position_cap)
-                usdc_to_use = max(min_usdc_per_trade, usdc_to_use)
+                # Calculate actual USDC to use
+                usdc_to_use = min(max_usdc_per_trade, max_position_cap)
                 
+                # If 1% is less than $5, use $5 (but only if we have enough)
+                if usdc_to_use < min_usdc_per_trade:
+                    if self.executor.usdc_balance >= min_usdc_per_trade:
+                        usdc_to_use = min_usdc_per_trade
+                    else:
+                        logger.warning(f"⚠️ Insufficient balance for minimum trade size")
+                        return
+                
+                # Calculate shares needed
                 order_size = usdc_to_use / opportunity['easy_price']
                 
-                # Ensure minimum 5 shares as required by Polymarket
-                if order_size < 5.0:
-                    order_size = 5.0
-                    usdc_to_use = order_size * opportunity['easy_price']
+                # Verify we can afford both legs
+                total_cost = (order_size * opportunity['easy_price']) + (order_size * (1 - opportunity['hard_price']))
+                if total_cost > self.executor.usdc_balance * 0.95:  # Keep 5% buffer
+                    logger.warning(f"⚠️ Total cost (${total_cost:.2f}) exceeds available balance")
+                    return
                 
                 logger.info(
-                    f"[EXECUTE] Trade size: {order_size:.2f} shares (${usdc_to_use:.2f} USDC) | "
-                    f"Easy: {opportunity['easy_condition_id'][:8]}... | "
-                    f"Hard: {opportunity['hard_condition_id'][:8]}..."
+                    f"[EXECUTE] Position sizing:\n"
+                    f"   Available Balance: ${self.executor.usdc_balance:.2f}\n"
+                    f"   Position Size (1%): ${max_usdc_per_trade:.2f}\n"
+                    f"   Actual Investment: ${usdc_to_use:.2f} (per leg)\n"
+                    f"   Total Cost (2 legs): ${total_cost:.2f}\n"
+                    f"   Shares: {order_size:.2f}\n"
+                    f"   Easy leg (YES): {opportunity['easy_condition_id'][:8]}... @ ${opportunity['easy_price']:.4f}\n"
+                    f"   Hard leg (NO): {opportunity['hard_condition_id'][:8]}... @ ${(1-opportunity['hard_price']):.4f}"
                 )
                 
                 # Execute arbitrage in thread to avoid blocking event loop
@@ -135,7 +171,14 @@ class PolymarketBot:
                     self.stats['trades_executed'] += 1
                     profit = opportunity['profit_margin'] * order_size
                     self.stats['total_pnl'] += profit
-                    logger.info(f"✅ [SUCCESS] Trade executed! Estimated profit: ${profit:.4f}")
+                    logger.info(
+                        f"✅ [SUCCESS] Arbitrage executed!\n"
+                        f"   Event: {opportunity['event']}\n"
+                        f"   Leg 1 (Easy YES): {order_size:.2f} shares @ ${opportunity['easy_price']:.4f}\n"
+                        f"   Leg 2 (Hard NO): {order_size:.2f} shares @ ${(1-opportunity['hard_price']):.4f}\n"
+                        f"   Total Investment: ${total_cost:.2f}\n"
+                        f"   Expected Profit: ${profit:.4f} ({opportunity['profit_pct']:.2f}%)"
+                    )
                     
                     # Log to CSV for persistence
                     if self.executor and hasattr(self.executor, 'transactions'):
@@ -173,13 +216,6 @@ class PolymarketBot:
             for event_title, market_data in markets.items():
                 token_ids = market_data.get("clob_token_ids", [])
                 all_tokens_list = market_data.get("all_token_ids", [])
-                
-                # Debug: Check data types
-                logger.debug(f"[DEBUG] Event: {event_title}")
-                logger.debug(f"[DEBUG] token_ids type: {type(token_ids)}, value: {token_ids[:2] if token_ids else 'empty'}")
-                logger.debug(f"[DEBUG] all_tokens_list type: {type(all_tokens_list)}, len: {len(all_tokens_list)}")
-                if all_tokens_list:
-                    logger.debug(f"[DEBUG] all_tokens_list[0] type: {type(all_tokens_list[0])}, value: {all_tokens_list[0]}")
                 
                 # Create pairs from hierarchical markets
                 for i in range(len(token_ids) - 1):
@@ -255,32 +291,44 @@ class PolymarketBot:
     
     async def market_monitoring_loop(self) -> None:
         """Main monitoring loop - checks for market updates with reconnection."""
+        reconnect_attempts = 0
+        max_reconnect_attempts = 5
+        
         while self.running:
             try:
-                logger.info("[RUN] Starting market monitoring loop")
+                # אם יש יותר מדי ניסיונות כושלים, עצור
+                if reconnect_attempts >= max_reconnect_attempts:
+                    logger.error(f"[FATAL] Failed to connect after {max_reconnect_attempts} attempts - stopping")
+                    self.running = False
+                    break
                 
                 # Ensure we have an active WebSocket connection
                 if self.ws.ws is None:
-                    logger.info("[RECONNECT] WebSocket not connected, attempting to reconnect...")
+                    reconnect_attempts += 1
+                    if reconnect_attempts == 1:
+                        logger.info("[RECONNECT] Reconnecting to WebSocket...")
                     if not await self.ws.connect():
-                        logger.error("[ERROR] Failed to reconnect WebSocket, waiting 30 seconds...")
+                        if reconnect_attempts >= 3:
+                            logger.warning(f"[RECONNECT] Attempt {reconnect_attempts}/{max_reconnect_attempts} failed")
                         await asyncio.sleep(30)
                         continue
+                
+                # איפוס מונה הניסיונות אחרי חיבור מוצלח
+                reconnect_attempts = 0
                 
                 # Start receiving data
                 await self.ws.receive_data(self.on_price_update)
                 
             except asyncio.CancelledError:
-                logger.info("[INFO] Market monitoring cancelled")
                 break
             except websockets.exceptions.ConnectionClosed:
-                logger.warning("[WEBSOCKET] Connection closed, will attempt reconnection...")
                 self.ws.ws = None  # Reset connection
-                await asyncio.sleep(5)  # Brief pause before reconnect
+                await asyncio.sleep(10)  # המתנה ארוכה יותר
             except Exception as e:
-                logger.error(f"[ERROR] Monitoring loop: {e}")
+                if reconnect_attempts >= 3:
+                    logger.warning(f"[ERROR] {str(e)[:50]}")
                 self.ws.ws = None  # Reset connection on any error
-                await asyncio.sleep(10)  # Wait before retry
+                await asyncio.sleep(15)  # המתנה עוד יותר ארוכה
     
     async def periodic_rescan_loop(self) -> None:
         """Periodically scan for new markets (every hour)."""
@@ -300,6 +348,25 @@ class PolymarketBot:
                 await self.scan_and_subscribe()
             except Exception as e:
                 logger.error(f"[ERROR] Rescan loop: {e}")
+    
+    async def settlement_check_loop(self) -> None:
+        """בדיקה תקופתית ושחרור פוזיציות בשווקים סגורים."""
+        while self.running:
+            try:
+                await asyncio.wait_for(asyncio.sleep(600), timeout=601)  # כל 10 דקות
+            except asyncio.TimeoutError:
+                pass
+            except asyncio.CancelledError:
+                break
+            
+            if not self.running:
+                break
+            
+            try:
+                if self.executor:
+                    await self.executor.check_and_settle_positions()
+            except Exception as e:
+                logger.error(f"[ERROR] Settlement loop: {e}")
     
     async def stats_reporter_loop(self) -> None:
         """Periodically report bot statistics."""
@@ -321,6 +388,13 @@ class PolymarketBot:
                     f"Trades: {self.stats['trades_executed']} | "
                     f"P&L: ${self.stats['total_pnl']:.2f}"
                 )
+                
+                # Show missed opportunities if any
+                if self.stats['missed_no_balance'] > 0:
+                    logger.info(
+                        f"[MISSED] {self.stats['missed_no_balance']} opportunities due to no balance | "
+                        f"Potential profit: ${self.stats['total_missed_profit']:.2f}"
+                    )
                 # Log to CSV for persistence
                 self.performance_monitor.session_stats['price_updates'] = self.stats['price_updates']
                 self.performance_monitor.session_stats['opportunities_found'] = self.stats['opportunities_found']
@@ -350,15 +424,27 @@ class PolymarketBot:
             logger.error("Failed to scan markets on startup")
             return
         
+        # Check if we have real balance
+        await self.executor.get_usdc_balance()
+        if not hasattr(self.executor, '_balance_is_real') or not self.executor._balance_is_real:
+            logger.warning("\n" + "="*60)
+            logger.warning("⚠️  TRADING DISABLED - No balance available")
+            logger.warning("="*60)
+            logger.warning("Bot will monitor opportunities but not trade.")
+            logger.warning("To enable: Add USDC to wallet and restart.")
+            logger.warning("="*60 + "\n")
+        
         # Create tasks with proper cancellation handling
         monitor_task = None
         rescan_task = None
         stats_task = None
+        settlement_task = None
         
         try:
             monitor_task = asyncio.create_task(self.market_monitoring_loop())
             rescan_task = asyncio.create_task(self.periodic_rescan_loop())
             stats_task = asyncio.create_task(self.stats_reporter_loop())
+            settlement_task = asyncio.create_task(self.settlement_check_loop())
             
             # Main loop - check if running every 100ms
             while self.running:
@@ -374,7 +460,7 @@ class PolymarketBot:
             # Ensure all tasks are cancelled
             self.running = False
             
-            tasks_to_cancel = [t for t in [monitor_task, rescan_task, stats_task] if t]
+            tasks_to_cancel = [t for t in [monitor_task, rescan_task, stats_task, settlement_task] if t]
             for task in tasks_to_cancel:
                 if not task.done():
                     task.cancel()
@@ -388,16 +474,26 @@ class PolymarketBot:
     async def cleanup(self) -> None:
         """Clean up resources on shutdown."""
         logger.info("[CLEANUP] Closing connections...")
-        await self.ws.close()
+        
+        try:
+            await self.ws.close()
+        except Exception as e:
+            logger.error(f"Error closing WebSocket: {e}")
         
         # Generate final performance report
-        self.performance_monitor.report()
+        try:
+            self.performance_monitor.report()
+        except Exception as e:
+            logger.error(f"Error generating report: {e}")
         
         logger.info("[DONE] Bot shutdown complete")
 
 
 async def main():
     """Entry point for the bot."""
+    # Initialize logging first
+    setup_logging()
+    
     bot = PolymarketBot()
     await bot.run()
 

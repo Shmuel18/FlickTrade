@@ -43,8 +43,6 @@ class TransactionLogger:
         # Initialize CSV file if it doesn't exist
         if not self.csv_path.exists():
             self._create_csv_file()
-        
-        logger.info(f"📊 Transaction logger initialized: {self.csv_path}")
     
     def _create_csv_file(self) -> None:
         """Create CSV file with headers."""
@@ -52,7 +50,6 @@ class TransactionLogger:
             with open(self.csv_path, 'w', newline='') as f:
                 writer = csv.DictWriter(f, fieldnames=self.csv_headers)
                 writer.writeheader()
-            logger.info(f"✅ Created transaction log: {self.csv_path}")
         except Exception as e:
             logger.error(f"Failed to create CSV file: {e}")
     
@@ -85,7 +82,6 @@ class TransactionLogger:
                 writer = csv.DictWriter(f, fieldnames=self.csv_headers)
                 writer.writerow(row)
             
-            logger.info(f"📝 Transaction logged: {transaction.transaction_id}")
         except Exception as e:
             logger.error(f"Failed to log transaction: {e}")
     

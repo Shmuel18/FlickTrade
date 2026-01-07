@@ -65,5 +65,17 @@ class WebSocketManager:
                             if token_id and price_val:
                                 self.prices[token_id] = float(price_val)
                                 await callback(token_id, float(price_val))
+        except websockets.exceptions.ConnectionClosed:
+            self.ws = None
+            raise  # העבר את השגיאה למעלה (בלי לוג)
         except Exception as e:
-            logger.error(f"WS error: {e}")
+            self.ws = None
+            raise  # העבר את השגיאה למעלה (בלי לוג)
+    
+    async def close(self) -> None:
+        """Close WebSocket connection gracefully."""
+        if self.ws:
+            try:
+                await self.ws.close()
+            except Exception as e:
+                logger.error(f"Error closing WebSocket: {e}")

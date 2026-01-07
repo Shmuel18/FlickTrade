@@ -29,7 +29,7 @@ def check_arbitrage(pairs: List[Dict[str, Any]],
     opportunities = []
     
     if not pairs or not current_prices:
-        logger.debug("No pairs or prices available for arbitrage check")
+
         return opportunities
 
     for pair in pairs:
@@ -53,7 +53,6 @@ def check_arbitrage(pairs: List[Dict[str, Any]],
             
             # Validate price ranges
             if not (0 <= price_parent <= 1 and 0 <= price_child <= 1):
-                logger.debug(f"Invalid price range - Parent: {price_parent}, Child: {price_child}")
                 continue
             
             # CORRECT Arbitrage detection:
@@ -76,14 +75,9 @@ def check_arbitrage(pairs: List[Dict[str, Any]],
                     'strategy': 'BUY parent (easy/cheap) + BUY NO on child (hard/expensive) = PROFIT'
                 }
                 opportunities.append(opportunity)
-                logger.debug(f"[ARBITRAGE] {event_title} | "
-                          f"Profit: ${profit:.4f} ({opportunity['profit_pct']:.2f}%)")
                 
         except Exception as e:
             logger.error(f"Error checking pair {pair}: {e}")
             continue
-    
-    if opportunities:
-        logger.debug(f"Total opportunities found: {len(opportunities)}")
     
     return sorted(opportunities, key=lambda x: x['profit_margin'], reverse=True)
