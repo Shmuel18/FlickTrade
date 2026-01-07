@@ -97,10 +97,10 @@ class SimpleCryptoBot:
                 
                 # סרוק שווקים
                 opportunities = scan_extreme_price_markets(
-                    min_hours_until_close=8,      # לפחות 8 שעות עד סגירה
-                    max_entry_price=0.004,        # קנה עד 0.4 סנט
-                    exit_multiplier=2.0,          # מכור ב-X2 (0.8 סנט)
-                    focus_crypto=True             # קריפטו בלבד
+                    min_hours_until_close=1,      # לפחות שעה עד סגירה
+                    max_entry_price=0.20,         # קנה עד 20 סנט
+                    exit_multiplier=2.0,          # מכור ב-X2 (40 סנט)
+                    focus_crypto=False            # כל השווקים (לא רק קריפטו)
                 )
                 
                 self.stats["scans"] += 1

@@ -11,8 +11,8 @@ logger = logging.getLogger(__name__)
 GAMMA_API_URL = "https://gamma-api.polymarket.com"
 
 def scan_extreme_price_markets(
-    min_hours_until_close: int = 8,
-    max_entry_price: float = 0.004,
+    min_hours_until_close: int = 1,
+    max_entry_price: float = 0.20,
     exit_multiplier: float = 2.0,
     focus_crypto: bool = True
 ) -> List[Dict]:
@@ -29,18 +29,27 @@ def scan_extreme_price_markets(
         רשימת הזדמנויות קנייה
     """
     try:
-        url = f"{GAMMA_API_URL}/events?active=true&closed=false&limit=100"
+        # Try markets endpoint instead of events
+        url = f"{GAMMA_API_URL}/markets?active=true&closed=false&limit=5000"
         logger.info(f"🔍 סורק שווקים: {url}")
         
         response = requests.get(url, timeout=15)
         response.raise_for_status()
-        events = response.json()
+        data = response.json()
         
-        if not isinstance(events, list):
-            logger.error(f"תגובה לא תקינה מהAPI: {type(events)}")
+        # Check if we got markets directly or events
+        if not isinstance(data, list):
+            logger.error(f"תגובה לא תקינה מהAPI: {type(data)}")
             return []
         
-        logger.info(f"📊 נמצאו {len(events)} אירועים פעילים")
+        # If we got markets directly (not events), wrap them
+        if data and "question" in data[0]:
+            logger.info(f"📊 נמצאו {len(data)} שווקים ישירות")
+            # Create fake events with single market each
+            events = [{"markets": [market], "endDate": market.get("endDate"), "title": market.get("question", "Unknown")} for market in data]
+        else:
+            logger.info(f"📊 נמצאו {len(data)} אירועים פעילים")
+            events = data
         
         opportunities = []
         now = datetime.now(timezone.utc)
@@ -101,32 +110,16 @@ def scan_extreme_price_markets(
 
                         if not token_ids or not outcomes:
                             continue
-                        
-                        outcome_prices = market.get("outcomePrices", []) or []
 
-                        # לכל token, קבל את המחיר האמיתי
+                        # לכל token, קבל את המחיר האמיתי מ-Order Book
                         for idx, token_id in enumerate(token_ids):
                             outcome_name = outcomes[idx] if idx < len(outcomes) else "Unknown"
 
-                            price_data: Optional[Dict[str, float]] = None
-
-                            # נסה קודם כל להשתמש במחיר מה-Gamma API אם הוא נראה אמין
-                            gamma_price = None
-                            if idx < len(outcome_prices):
-                                try:
-                                    gamma_price = float(outcome_prices[idx])
-                                except (TypeError, ValueError):
-                                    gamma_price = None
-
-                            if gamma_price and 0 < gamma_price < 1:
-                                # יש מחיר תקין מ-Gamma, השתמש בו!
-                                price_data = {"best_bid": gamma_price * 0.99, "best_ask": gamma_price * 1.01}
-                            else:
-                                # אין מחיר תקין, נסה Order Book (יכול להיות איטי)
-                                price_data = get_current_price(token_id)
-                                if not price_data:
-                                    # גם Order Book לא עזר, דלג על token זה
-                                    continue
+                            # קבל מחיר מ-Order Book בלבד (Gamma לא אמין - מחזיר "0" ו-"1")
+                            price_data = get_current_price(token_id)
+                            if not price_data:
+                                # אין מחיר זמין, דלג
+                                continue
 
                             best_bid = price_data.get("best_bid")
                             best_ask = price_data.get("best_ask")
@@ -202,7 +195,7 @@ def get_current_price(token_id: str) -> Optional[Dict[str, float]]:
     try:
         # השתמש ב-order book API
         url = f"https://clob.polymarket.com/book?token_id={token_id}"
-        response = requests.get(url, timeout=2)  # Timeout קצר יותר!
+        response = requests.get(url, timeout=5)  # 5 שניות timeout
         response.raise_for_status()
         data = response.json()
         
