@@ -16,10 +16,12 @@ API_KEY = os.getenv("POLYMARKET_API_KEY")
 API_SECRET = os.getenv("POLYMARKET_API_SECRET")
 API_PASSPHRASE = os.getenv("POLYMARKET_API_PASSPHRASE")
 PRIVATE_KEY = os.getenv("POLYMARKET_PRIVATE_KEY")
+FUNDER_ADDRESS = os.getenv("POLYMARKET_FUNDER_ADDRESS")
 
 # Validate required credentials - FAIL HARD if missing
 required_env_vars = ["POLYMARKET_API_KEY", "POLYMARKET_API_SECRET", 
-                     "POLYMARKET_API_PASSPHRASE", "POLYMARKET_PRIVATE_KEY"]
+                     "POLYMARKET_API_PASSPHRASE", "POLYMARKET_PRIVATE_KEY", 
+                     "POLYMARKET_FUNDER_ADDRESS"]
 missing_vars = [var for var in required_env_vars if not os.getenv(var)]
 if missing_vars:
     error_msg = f"CRITICAL: Missing required environment variables: {', '.join(missing_vars)}"

@@ -76,7 +76,7 @@ def check_arbitrage(pairs: List[Dict[str, Any]],
                     'strategy': 'BUY parent (easy/cheap) + BUY NO on child (hard/expensive) = PROFIT'
                 }
                 opportunities.append(opportunity)
-                logger.info(f"[ARBITRAGE] {event_title} | "
+                logger.debug(f"[ARBITRAGE] {event_title} | "
                           f"Profit: ${profit:.4f} ({opportunity['profit_pct']:.2f}%)")
                 
         except Exception as e:
@@ -84,6 +84,6 @@ def check_arbitrage(pairs: List[Dict[str, Any]],
             continue
     
     if opportunities:
-        logger.info(f"Total opportunities found: {len(opportunities)}")
+        logger.debug(f"Total opportunities found: {len(opportunities)}")
     
     return sorted(opportunities, key=lambda x: x['profit_margin'], reverse=True)
