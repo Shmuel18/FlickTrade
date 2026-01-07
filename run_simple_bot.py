@@ -10,14 +10,15 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
 from polymarket_bot.simple_bot import main
+from polymarket_bot.config import BUY_PRICE_THRESHOLD, SELL_MULTIPLIER
 
 if __name__ == "__main__":
     print("🚀 Starting Simple Crypto Bot...")
     print("=" * 60)
     print("Strategy:")
     print("  • Scan ALL markets with extreme low prices")
-    print("  • Buy at: ≤ 0.20 (20 cents)")
-    print("  • Sell at: 2x price (0.40 = 40 cents)")
+    print(f"  • Buy at: ≤ ${BUY_PRICE_THRESHOLD} ({int(BUY_PRICE_THRESHOLD*100)} cents)")
+    print(f"  • Sell at: {SELL_MULTIPLIER}x price (${BUY_PRICE_THRESHOLD * SELL_MULTIPLIER})")
     print("  • NO stop loss - hold until target")
     print("  • Only markets with 1+ hours until close")
     print("=" * 60)

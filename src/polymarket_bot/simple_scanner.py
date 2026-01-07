@@ -1,8 +1,6 @@
 # simple_scanner.py
-"""סורק שווקים בפוליימרקט - מחפש מחירים קיצוניים בשווקי קריפטו"""
 import requests
 import logging
-import json
 from datetime import datetime, timezone, timedelta
 from typing import List, Dict, Optional
 
@@ -11,209 +9,301 @@ logger = logging.getLogger(__name__)
 GAMMA_API_URL = "https://gamma-api.polymarket.com"
 
 def scan_extreme_price_markets(
-    min_hours_until_close: int = 1,
-    max_entry_price: float = 0.20,
-    exit_multiplier: float = 2.0,
-    focus_crypto: bool = True
+    min_hours_until_close: int = 0,
+    low_price_threshold: float = 0.01,
+    focus_crypto: bool = False,
+    max_price_checks: int = 500  # מגביל כמה שווקים לבדוק (למנוע timeouts)
 ) -> List[Dict]:
-    """
-    סורק שווקים עם מחירים נמוכים לקנייה.
-    
-    Args:
-        min_hours_until_close: מינימום שעות עד סגירת השוק
-        max_entry_price: מחיר מקסימלי לקנייה (ברירת מחדל: 0.004 = 0.4 סנט)
-        exit_multiplier: יעד יציאה כפולת המחיר (ברירת מחדל: 2.0 = כפל 2)
-        focus_crypto: להתמקד רק בשווקי קריפטו
-    
-    Returns:
-        רשימת הזדמנויות קנייה
-    """
+    """סורק מהיר של כל השווקים (עם פאג'ינציה) למציאת מחירים נמוכים."""
     try:
-        # Try markets endpoint instead of events
-        url = f"{GAMMA_API_URL}/markets?active=true&closed=false&limit=5000"
-        logger.info(f"🔍 סורק שווקים: {url}")
+        # שליפת כל השווקים הפעילים עם פאג'ינציה
+        markets = []
+        offset = 0
+        limit = 500
+        max_markets = 3000  # הגבלה כדי לא לקחת יותר מדי זמן
         
-        response = requests.get(url, timeout=15)
-        response.raise_for_status()
-        data = response.json()
+        logger.info(f"🔍 סורק את כל השווקים בפולימרקט (עם פאג'ינציה)...")
         
-        # Check if we got markets directly or events
-        if not isinstance(data, list):
-            logger.error(f"תגובה לא תקינה מהAPI: {type(data)}")
-            return []
+        while len(markets) < max_markets:
+            url = f"{GAMMA_API_URL}/markets?active=true&closed=false&limit={limit}&offset={offset}"
+            
+            response = requests.get(url, timeout=15)
+            response.raise_for_status()
+            batch = response.json()
+            
+            if not batch or len(batch) == 0:
+                break
+            
+            markets.extend(batch)
+            logger.info(f"   📥 נמשכו {len(batch)} שווקים (סה\"כ: {len(markets)})")
+            
+            if len(batch) < limit:
+                break
+            
+            offset += limit
         
-        # If we got markets directly (not events), wrap them
-        if data and "question" in data[0]:
-            logger.info(f"📊 נמצאו {len(data)} שווקים ישירות")
-            # Create fake events with single market each
-            events = [{"markets": [market], "endDate": market.get("endDate"), "title": market.get("question", "Unknown")} for market in data]
-        else:
-            logger.info(f"📊 נמצאו {len(data)} אירועים פעילים")
-            events = data
+        logger.info(f"✅ סה\"כ נמשכו {len(markets)} שווקים")
+        
+        # סטטיסטיקות לדיבוג
+        stats = {
+            "markets_total": len(markets),
+            "after_active_filter": 0,
+            "after_time_filter": 0,
+            "after_tradable_filter": 0,
+            "price_fetch_success": 0,
+            "price_fetch_fail": 0,
+            "prices_seen": [],
+            "num_below_threshold": 0
+        }
         
         opportunities = []
         now = datetime.now(timezone.utc)
         min_close_time = now + timedelta(hours=min_hours_until_close)
         
-        markets_checked = 0
+        # דוגמאות לדיבוג (10 ראשונים)
+        debug_samples = []
         
-        for event in events:
-            try:
-                # פילטר קריפטו
-                if focus_crypto:
-                    tags = event.get("tags", [])
-                    tag_names = []
-                    for tag in tags:
-                        if isinstance(tag, dict):
-                            value = tag.get("name") or tag.get("slug") or ""
-                            tag_names.append(value.lower())
-                        else:
-                            tag_names.append(str(tag).lower())
-
-                    title_text = f"{event.get('title', '')} {event.get('description', '')}".lower()
-
-                    has_crypto_tag = any(keyword in tag for tag in tag_names for keyword in ("crypto", "btc", "bitcoin", "eth", "ethereum"))
-                    has_crypto_text = any(keyword in title_text for keyword in ("crypto", "bitcoin", "btc", "ethereum", "eth"))
-
-                    if not (has_crypto_tag or has_crypto_text):
-                        continue
-                
-                # בדיקת זמן סגירה
-                end_date_str = event.get("endDate")
-                if not end_date_str:
-                    continue
-                
-                end_date = datetime.fromisoformat(end_date_str.replace('Z', '+00:00'))
-                if end_date < min_close_time:
-                    continue
-                
-                hours_until_close = (end_date - now).total_seconds() / 3600
-                
-                # עבור כל שוק באירוע
-                markets = event.get("markets", [])
-                for market in markets:
-                    try:
-                        if not market.get("active", False) or market.get("closed", False):
-                            continue
-
-                        # קבל token IDs
-                        token_ids = market.get("clobTokenIds", [])
-
-                        # אם זה string, נסה לפרסר כ-JSON
-                        if isinstance(token_ids, str):
-                            try:
-                                token_ids = json.loads(token_ids)
-                            except Exception:
-                                token_ids = [token_ids] if token_ids else []
-
-                        outcomes = market.get("outcomes", [])
-
-                        if not token_ids or not outcomes:
-                            continue
-
-                        # לכל token, קבל את המחיר האמיתי מ-Order Book
-                        for idx, token_id in enumerate(token_ids):
-                            outcome_name = outcomes[idx] if idx < len(outcomes) else "Unknown"
-
-                            # קבל מחיר מ-Order Book בלבד (Gamma לא אמין - מחזיר "0" ו-"1")
-                            price_data = get_current_price(token_id)
-                            if not price_data:
-                                # אין מחיר זמין, דלג
-                                continue
-
-                            best_bid = price_data.get("best_bid")
-                            best_ask = price_data.get("best_ask")
-
-                            # בדיקה פשוטה: האם מחיר הקנייה (ASK) נמוך מספיק?
-                            if best_ask is None or best_ask > max_entry_price:
-                                continue
-
-                            # יש לנו הזדמנות!
-                            entry_price = best_ask
-                            target_exit_price = entry_price * exit_multiplier
-                            
-                            # יש לנו הזדמנות!
-                            entry_price = best_ask
-                            target_exit_price = entry_price * exit_multiplier
-                            
-                            opportunity = {
-                                "event_title": event.get("title", "Unknown"),
-                                "market_question": market.get("question", "Unknown"),
-                                "outcome": outcome_name,
-                                "entry_price": entry_price,
-                                "target_exit_price": target_exit_price,
-                                "current_price": entry_price,
-                                "best_bid": best_bid,
-                                "best_ask": best_ask,
-                                "token_id": token_id,
-                                "condition_id": market.get("conditionId"),
-                                "hours_until_close": round(hours_until_close, 1),
-                                "end_date": end_date_str,
-                                "tags": event.get("tags", [])
-                            }
-                            
-                            opportunities.append(opportunity)
-                            
-                            logger.info(
-                                f"✅ מצאתי: {opportunity['event_title'][:50]} | "
-                                f"{outcome_name} @ ${entry_price:.4f} | "
-                                f"יעד: ${target_exit_price:.4f} | "
-                                f"{hours_until_close:.1f}h עד סגירה"
-                            )
-                    
-                    except Exception as e:
-                        logger.debug(f"שגיאה בעיבוד שוק: {e}")
-                        continue
-                
-                # עדכון מונה
-                markets_checked += len(markets)
-                if markets_checked % 50 == 0:
-                    logger.info(f"📊 נבדקו {markets_checked} שווקים, נמצאו {len(opportunities)} הזדמנויות")
+        for m in markets:
+            # בדיקת תקינות בסיסית
+            if not m.get("active") or m.get("closed"): continue
+            stats["after_active_filter"] += 1
             
+            # סינון קריפטו אם מבוקש
+            question = m.get("question", "").lower()
+            if focus_crypto:
+                crypto_keywords = ["bitcoin", "btc", "$btc", "ethereum", "eth", "$eth", 
+                                 "crypto", "cryptocurrency", "sol", "solana"]
+                if not any(kw in question for kw in crypto_keywords):
+                    continue
+            
+            # בדיקת זמן סגירה
+            end_date_str = m.get("endDate")
+            if not end_date_str: continue
+            try:
+                end_date = datetime.fromisoformat(end_date_str.replace('Z', '+00:00'))
+                hours_until_close = (end_date - now).total_seconds() / 3600
+                if end_date < min_close_time: continue
+                stats["after_time_filter"] += 1
+            except: continue
+
+            # בדיקת tokens
+            token_ids = m.get("clobTokenIds")
+            if not token_ids: continue
+            
+            import json
+            if isinstance(token_ids, str):
+                try:
+                    token_ids = json.loads(token_ids)
+                except:
+                    continue
+            
+            if not token_ids or len(token_ids) < 2: continue
+            stats["after_tradable_filter"] += 1
+            
+            # הגבלת מספר בדיקות מחיר כדי לא להיתקע
+            if stats["price_fetch_success"] >= max_price_checks:
+                break
+            
+            # כאן הבעיה: outcomePrices זה לא best_ask!
+            # זה last price או mid price - לא מה שאנחנו באמת יכולים לקנות בו
+            outcome_prices_gamma = m.get("outcomePrices", [])
+            
+            # מושך מחיר רק פעם אחת - של YES (index 0)
+            # ומשם מחשבים את NO
+            try:
+                yes_token_id = token_ids[0]
+                no_token_id = token_ids[1] if len(token_ids) > 1 else None
+                
+                # קריאה ל-CLOB לקבלת best_ask של YES
+                book_url = f"https://clob.polymarket.com/book?token_id={yes_token_id}"
+                book_response = requests.get(book_url, timeout=3)
+                
+                if book_response.status_code != 200:
+                    stats["price_fetch_fail"] += 1
+                    continue
+                
+                book = book_response.json()
+                asks = book.get("asks", [])
+                
+                if not asks or len(asks) == 0:
+                    stats["price_fetch_fail"] += 1
+                    continue
+                
+                # best_ask של YES
+                yes_price = float(asks[0].get("price", 0))
+                
+                if yes_price <= 0:
+                    stats["price_fetch_fail"] += 1
+                    continue
+                
+                # המחיר של NO הוא ההפך (במקרה אידיאלי)
+                # אבל בפועל צריך למשוך גם את order book של NO
+                # כי יכול להיות spread
+                no_price = 1.0 - yes_price  # זה מחיר משוער
+                
+                if no_token_id:
+                    try:
+                        no_book_url = f"https://clob.polymarket.com/book?token_id={no_token_id}"
+                        no_book_response = requests.get(no_book_url, timeout=3)
+                        if no_book_response.status_code == 200:
+                            no_book = no_book_response.json()
+                            no_asks = no_book.get("asks", [])
+                            if no_asks and len(no_asks) > 0:
+                                no_price = float(no_asks[0].get("price", no_price))
+                    except:
+                        pass  # נשאר עם המחיר המשוער
+                
+                stats["price_fetch_success"] += 1
+                stats["prices_seen"].append(yes_price)
+                stats["prices_seen"].append(no_price)
+                
+                # שמירת דוגמה לדיבוג
+                if len(debug_samples) < 10:
+                    gamma_yes = float(outcome_prices_gamma[0]) if len(outcome_prices_gamma) > 0 else None
+                    gamma_no = float(outcome_prices_gamma[1]) if len(outcome_prices_gamma) > 1 else None
+                    debug_samples.append({
+                        "title": m.get("question", "")[:60],
+                        "outcome": f"YES@${yes_price:.4f} / NO@${no_price:.4f}",
+                        "gamma_price": gamma_yes,
+                        "best_ask": yes_price,
+                        "opposite_price": no_price,
+                        "hours_until_close": round(hours_until_close, 1)
+                    })
+                
+                # בדיקה 1: YES מתחת ל-threshold
+                if 0.0001 <= yes_price <= low_price_threshold:
+                    stats["num_below_threshold"] += 1
+                    opportunities.append({
+                        "event_title": m.get("question", "Unknown"),
+                        "market_question": m.get("question", "Unknown"),
+                        "outcome": "YES",
+                        "current_price": yes_price,
+                        "token_id": yes_token_id,
+                        "hours_until_close": round(hours_until_close, 1)
+                    })
+                
+                # בדיקה 2: NO מתחת ל-threshold
+                if no_token_id and 0.0001 <= no_price <= low_price_threshold:
+                    stats["num_below_threshold"] += 1
+                    opportunities.append({
+                        "event_title": m.get("question", "Unknown"),
+                        "market_question": m.get("question", "Unknown"),
+                        "outcome": "NO",
+                        "current_price": no_price,
+                        "token_id": no_token_id,
+                        "hours_until_close": round(hours_until_close, 1)
+                    })
+                    
             except Exception as e:
-                logger.debug(f"שגיאה בעיבוד אירוע: {e}")
+                stats["price_fetch_fail"] += 1
                 continue
         
-        logger.info(f"🎯 סה\"כ נמצאו {len(opportunities)} הזדמנויות (נבדקו {markets_checked} שווקים)")
+        # הדפסת סטטיסטיקות מפורטות
+        logger.info(f"\n{'='*70}")
+        logger.info(f"📊 סטטיסטיקות סריקה:")
+        logger.info(f"   Markets total: {stats['markets_total']}")
+        logger.info(f"   ├─ After active filter: {stats['after_active_filter']}")
+        logger.info(f"   ├─ After time filter: {stats['after_time_filter']}")
+        logger.info(f"   └─ After tradable filter: {stats['after_tradable_filter']}")
+        logger.info(f"   Price fetches: ✅ {stats['price_fetch_success']} | ❌ {stats['price_fetch_fail']}")
+        
+        if stats["prices_seen"]:
+            import statistics
+            prices = sorted(stats["prices_seen"])
+            logger.info(f"   Prices distribution:")
+            logger.info(f"   ├─ Min: ${min(prices):.4f}")
+            logger.info(f"   ├─ P10: ${prices[len(prices)//10]:.4f}")
+            logger.info(f"   ├─ Median: ${statistics.median(prices):.4f}")
+            logger.info(f"   ├─ P90: ${prices[len(prices)*9//10]:.4f}")
+            logger.info(f"   └─ Max: ${max(prices):.4f}")
+        
+        logger.info(f"   Below threshold (${low_price_threshold}): {stats['num_below_threshold']}")
+        logger.info(f"{'='*70}\n")
+        
+        # הדפסת דוגמאות - תמיד!
+        if debug_samples:
+            logger.info(f"🔬 דוגמאות מחירים ({len(debug_samples)} שווקים):")
+            for sample in debug_samples:
+                gamma = sample['gamma_price'] if sample['gamma_price'] else 0
+                logger.info(f"   • {sample['title']}")
+                logger.info(f"     {sample['outcome']} | Gamma: ${gamma:.4f} | {sample['hours_until_close']}h")
+            logger.info("")
+        else:
+            logger.info(f"⚠️ לא נאספו דוגמאות (אולי כל השווקים נדחו בפילטרים)\n")
+        
+        if opportunities:
+            logger.info(f"🎯 נמצאו {len(opportunities)} הזדמנויות במחיר של ${low_price_threshold} ומטה!")
+            # מדפיס את כל ההזדמנויות (לא רק 5 ראשונות)
+            for opp in opportunities[:20]:  # מגביל ל-20 בלוגים
+                logger.info(f"  • {opp['event_title'][:60]} | {opp['outcome']} @ ${opp['current_price']:.4f}")
+            if len(opportunities) > 20:
+                logger.info(f"  ... ועוד {len(opportunities) - 20} הזדמנויות נוספות")
+        else:
+            logger.info(f"❌ לא נמצאו הזדמנויות במחיר של ${low_price_threshold} ומטה")
+        
         return opportunities
-    
     except Exception as e:
         logger.error(f"❌ שגיאה בסריקה: {e}")
         return []
 
-
-def get_current_price(token_id: str) -> Optional[Dict[str, float]]:
-    """
-    מחזיר את המחיר הנוכחי של token מסוים.
-    
-    Args:
-        token_id: מזהה ה-token
-    
-    Returns:
-        מילון עם המחיר הנמוך/גבוה או None אם נכשל
-    """
+def search_markets_by_keywords(keywords: List[str], max_results: int = 3000) -> List[Dict]:
+    """מחפש שווקים לפי מילות מפתח (חיפוש גמיש)."""
     try:
-        # השתמש ב-order book API
-        url = f"https://clob.polymarket.com/book?token_id={token_id}"
-        response = requests.get(url, timeout=5)  # 5 שניות timeout
-        response.raise_for_status()
-        data = response.json()
+        markets = []
+        offset = 0
+        limit = 500
         
-        bids = data.get("bids", [])
-        asks = data.get("asks", [])
+        logger.info(f"🔎 מחפש שווקים עם מילות המפתח: {', '.join(keywords)}")
         
-        best_bid = float(bids[0].get("price", 0)) if bids else None
-        best_ask = float(asks[0].get("price", 0)) if asks else None
-
-        price_data: Dict[str, float] = {}
-
-        if best_bid and best_bid > 0:
-            price_data["best_bid"] = best_bid
-        if best_ask and best_ask > 0:
-            price_data["best_ask"] = best_ask
-
-        return price_data if price_data else None
-    
+        while len(markets) < max_results:
+            url = f"{GAMMA_API_URL}/markets?limit={limit}&offset={offset}"
+            
+            response = requests.get(url, timeout=15)
+            response.raise_for_status()
+            batch = response.json()
+            
+            if not batch or len(batch) == 0:
+                break
+            
+            markets.extend(batch)
+            
+            if len(batch) < limit:
+                break
+            
+            offset += limit
+        
+        # סינון לפי מילות מפתח
+        matching_markets = []
+        for m in markets:
+            question = m.get("question", "").lower()
+            description = m.get("description", "").lower()
+            
+            # בדיקה אם כל מילות המפתח נמצאות בשאלה או בתיאור
+            if all(any(kw.lower() in text for text in [question, description]) for kw in keywords):
+                matching_markets.append({
+                    "question": m.get("question"),
+                    "active": m.get("active"),
+                    "closed": m.get("closed"),
+                    "end_date": m.get("endDate"),
+                    "token_ids": m.get("clobTokenIds"),
+                    "outcome_prices": m.get("outcomePrices"),
+                    "outcomes": m.get("outcomes", ["YES", "NO"])
+                })
+        
+        logger.info(f"✅ נמצאו {len(matching_markets)} שווקים מתאימים מתוך {len(markets)}")
+        return matching_markets
+        
     except Exception as e:
-        logger.warning(f"לא הצלחתי לקבל מחיר עבור {token_id}: {e}")
+        logger.error(f"❌ שגיאה בחיפוש: {e}")
+        return []
+
+def get_current_price(token_id: str) -> Optional[float]:
+    """מחזיר מחיר ASK מ-Orderbook עבור פוזיציה קיימת."""
+    try:
+        url = f"https://clob.polymarket.com/prices?token_id={token_id}"
+        data = requests.get(url, timeout=5).json()
+        if token_id in data:
+            price = float(data[token_id].get("ask", 0))
+            return price if price > 0 else None
         return None
+    except: return None

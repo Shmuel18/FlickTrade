@@ -8,19 +8,24 @@ print("="*70)
 print("🔍 מחפש: Bitcoin above 84k on January 8")
 print("="*70)
 
-# Get all events
-url = "https://gamma-api.polymarket.com/events?active=true&closed=false&limit=5000"
-print(f"\n1. מושך אירועים מ-API: {url}")
+# Get all events - ללא פילטר active/closed בשביל לבדוק אם האירוע קיים בכלל
+url = "https://gamma-api.polymarket.com/events?limit=5000"
+print(f"\n1. מושך אירועים מ-API (בלי פילטר active/closed): {url}")
 response = requests.get(url, timeout=15)
 events = response.json()
-print(f"   ✓ קיבלתי {len(events)} אירועים")
+print(f"   ✓ קיבלתי {len(events)} אירועים (active + closed + paused)")
 
 # Search for the event
 print("\n2. מחפש את האירוע...")
 found_event = None
 for event in events:
     title = event.get("title", "").lower()
-    if "bitcoin" in title and "january 8" in title:
+    # חיפוש גמיש יותר: BTC/Bitcoin + 84k + Jan 8 בכל פורמט
+    has_bitcoin = any(keyword in title for keyword in ["bitcoin", "btc", "$btc"])
+    has_84k = any(keyword in title for keyword in ["84k", "84,000", "84000", "$84"])
+    has_jan8 = any(keyword in title for keyword in ["jan 8", "january 8", "jan. 8", "1/8", "01/08"])
+    
+    if has_bitcoin and has_84k and has_jan8:
         found_event = event
         print(f"   ✅ מצאתי! Title: {event.get('title')}")
         break
@@ -28,10 +33,16 @@ for event in events:
 if not found_event:
     print("   ❌ לא מצאתי את האירוע ב-API!")
     print("\n   דוגמאות לאירועי Bitcoin שנמצאו:")
-    bitcoin_events = [e for e in events if "bitcoin" in e.get("title", "").lower()]
+    bitcoin_events = [e for e in events if any(kw in e.get("title", "").lower() for kw in ["bitcoin", "btc", "$btc"])]
     for e in bitcoin_events[:10]:
         print(f"     • {e.get('title')}")
     print(f"\n   סה\"כ אירועי Bitcoin: {len(bitcoin_events)}")
+    
+    # הצג גם אירועים עם 84k
+    print("\n   אירועים שמכילים '84':")
+    events_with_84 = [e for e in events if "84" in e.get("title", "").lower()]
+    for e in events_with_84[:20]:
+        print(f"     • {e.get('title')}")
     exit()
 
 # Check event details
