@@ -86,10 +86,10 @@ def scan_polymarket_for_hierarchical_markets(retry_count: int = 0) -> Dict[str, 
     Returns:
         Dictionary mapping event titles to market data
     """
-    url = f"{GAMMA_API_URL}/events?active=true&closed=false&limit=500"
+    url = f"{GAMMA_API_URL}/events?active=true&closed=false&limit=1000"
     
     try:
-        logger.info(f"Scanning Gamma API: {url}")
+        logger.info(f"Scanning Gamma API: {url} (limit=1000 for wider coverage)")
         response = requests.get(url, timeout=10)
         response.raise_for_status()
         events = response.json()

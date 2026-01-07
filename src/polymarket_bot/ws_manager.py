@@ -28,6 +28,7 @@ class WebSocketManager:
         """
         try:
             logger.info(f"Connecting to CLOB WebSocket: {CLOB_WS_URL}")
+            logger.debug(f"[WS_DEBUG] Attempting connection with timeout=15s")
             self.ws = await asyncio.wait_for(
                 websockets.connect(
                     CLOB_WS_URL,
@@ -38,11 +39,13 @@ class WebSocketManager:
                 timeout=15
             )
             logger.info("[CONNECT] Connected to CLOB WebSocket")
+            logger.debug("[WS_DEBUG] WebSocket handshake complete, ready for subscriptions")
             self.reconnect_count = 0
             return True
             
         except asyncio.TimeoutError:
             logger.error(f"WebSocket connection timeout (attempt {retry_count + 1})")
+            logger.debug("[WS_DEBUG] Connection timed out after 15 seconds")
             if retry_count < MAX_RETRIES:
                 await asyncio.sleep(2 ** retry_count)  # Exponential backoff
                 return await self.connect(retry_count + 1)
@@ -91,17 +94,41 @@ class WebSocketManager:
     async def subscribe_batch(self, token_ids: List[str]) -> int:
         """Subscribe to multiple tokens efficiently.
         
+        Sends a single batch subscription with all tokens at once.
+        Uses correct Polymarket CLOB payload format: type=market, assets_ids
+        
         Args:
             token_ids: List of token IDs to subscribe to
         
         Returns:
-            Number of successful subscriptions
+            Number of tokens subscribed to
         """
-        success_count = 0
-        for token_id in token_ids:
-            if await self.subscribe(token_id):
-                success_count += 1
-        return success_count
+        if not self.ws:
+            logger.error("Cannot subscribe - WebSocket not connected")
+            return 0
+        
+        if not token_ids:
+            logger.warning("Empty token list provided to subscribe_batch")
+            return 0
+        
+        try:
+            # Correct Polymarket CLOB subscription format from official docs
+            payload = {
+                "type": "market",
+                "assets_ids": token_ids
+            }
+            logger.debug(f"Sending batch subscription for {len(token_ids)} tokens")
+            await self.ws.send(json.dumps(payload))
+            
+            # Track all subscribed tokens
+            self.subscribed_tokens.update(token_ids)
+            
+            logger.info(f"Successfully subscribed to {len(token_ids)} tokens")
+            return len(token_ids)
+            
+        except Exception as e:
+            logger.error(f"Failed to send batch subscription: {e}")
+            return 0
 
     async def receive_data(self, callback: Callable) -> None:
         """Receive and process market data updates.
@@ -114,9 +141,16 @@ class WebSocketManager:
             return
         
         try:
+            message_count = 0
+            price_count = 0
             async for message in self.ws:
                 if not message:
                     continue
+                
+                message_count += 1
+                # Log summary every 100 messages, and first 20 messages
+                if message_count <= 20 or message_count % 100 == 0:
+                    logger.info(f"[WS_DEBUG] Message #{message_count}: {str(message)[:200]}...")
                 
                 try:
                     data = json.loads(message)
@@ -129,6 +163,9 @@ class WebSocketManager:
                 
                 for msg in messages:
                     if not isinstance(msg, dict):
+                        if not isinstance(msg, list) or len(msg) > 0:
+                            # Only warn on non-empty non-dict/non-list
+                            logger.debug(f"Skipping non-dict message type: {type(msg)}")
                         continue
                     
                     # Extract best bid (highest bid price = best offer to buy)
@@ -143,6 +180,7 @@ class WebSocketManager:
                                 continue
                             
                             price = float(bids[0][0])
+                            price_count += 1
                             
                             # Sanity check: price should be 0-1 for yes/no tokens
                             if not (0 <= price <= 1):
@@ -151,10 +189,16 @@ class WebSocketManager:
                             
                             if token_id and price >= 0:
                                 self.prices[token_id] = price
+                                if price_count % 50 == 1:
+                                    logger.debug(f"Price #{price_count}: {token_id[:8]}...={price}")
                                 await callback(token_id, price)
                         except (ValueError, IndexError, TypeError) as e:
                             logger.debug(f"Error processing bid data: {e}")
                             continue
+                    else:
+                        # Log what other message types we're receiving
+                        if message_count <= 20:
+                            logger.debug(f"Message #{message_count} has no bids: {list(msg.keys())}")
                             
         except asyncio.CancelledError:
             logger.info("WebSocket receive loop cancelled")

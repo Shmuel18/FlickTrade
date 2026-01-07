@@ -825,3 +825,764 @@
   Total P&L: $0.00
 
 2026-01-07 01:47:40,029 - polymarket_bot.main - INFO - [DONE] Bot shutdown complete
+2026-01-07 03:06:08,615 - polymarket_bot.persistence - INFO - ✅ Created transaction log: C:\Users\shh92\OneDrive\Documenti\BotPolymarket\logs\transactions.csv
+2026-01-07 03:06:08,615 - polymarket_bot.persistence - INFO - 📊 Transaction logger initialized: C:\Users\shh92\OneDrive\Documenti\BotPolymarket\logs\transactions.csv
+2026-01-07 03:06:08,615 - polymarket_bot.main - INFO - 
+============================================================
+2026-01-07 03:06:08,616 - polymarket_bot.main - INFO - [START] POLYMARKET ARBITRAGE BOT
+2026-01-07 03:06:08,616 - polymarket_bot.main - INFO - [TIME] 2026-01-07 03:06:08
+2026-01-07 03:06:08,616 - polymarket_bot.main - INFO - [INFO] Press Ctrl+C to stop
+2026-01-07 03:06:08,616 - polymarket_bot.main - INFO - ============================================================
+
+2026-01-07 03:06:08,616 - polymarket_bot.main - INFO - [SCAN] Searching for hierarchical markets...
+2026-01-07 03:06:08,618 - polymarket_bot.scanner - INFO - Scanning Gamma API: https://gamma-api.polymarket.com/events?active=true&closed=false&limit=500
+2026-01-07 03:06:18,958 - polymarket_bot.scanner - WARNING - Mixed directions in How much spending will DOGE cut in 2025?: {'above', 'below'} - skipping
+2026-01-07 03:06:18,958 - polymarket_bot.scanner - WARNING - Mixed directions in # of federal jobs cut in 2025?: {'above', 'below'} - skipping
+2026-01-07 03:06:18,959 - polymarket_bot.scanner - INFO - Found hierarchical market: Ukraine recognizes Russian sovereignty over its territory by...? (2 markets)
+2026-01-07 03:06:18,959 - polymarket_bot.scanner - INFO - Found hierarchical market: How high will inflation get in 2025? (6 markets)
+2026-01-07 03:06:18,960 - polymarket_bot.scanner - WARNING - Mixed directions in How much revenue will the U.S. raise from tariffs in 2025?: {'above', 'below'} - skipping
+2026-01-07 03:06:18,961 - polymarket_bot.scanner - WARNING - Mixed directions in Harvey Weinstein prison time?: {'above', 'below'} - skipping
+2026-01-07 03:06:18,969 - polymarket_bot.scanner - INFO - Found hierarchical market: Lisa Cook out as Fed Governor by...? (5 markets)
+2026-01-07 03:06:18,969 - polymarket_bot.scanner - WARNING - Mixed directions in Carabao Cup Winner : {'above', 'below'} - skipping
+2026-01-07 03:06:18,971 - polymarket_bot.scanner - INFO - Found hierarchical market: Which Parties will be part of next Government of the Netherlands? (16 markets)
+2026-01-07 03:06:18,973 - polymarket_bot.scanner - WARNING - Mixed directions in December Inflation Argentina - Annual: {'above', 'below'} - skipping
+2026-01-07 03:06:18,975 - polymarket_bot.scanner - INFO - Found hierarchical market: Opensea FDV above ___ one day after launch? (5 markets)
+2026-01-07 03:06:18,976 - polymarket_bot.scanner - INFO - Found hierarchical market: Football.Fun FDV above ___ one day after launch? (6 markets)
+2026-01-07 03:06:18,977 - polymarket_bot.scanner - INFO - Found hierarchical market: California Governor Election Winner (45 markets)
+2026-01-07 03:06:18,978 - polymarket_bot.scanner - INFO - Found hierarchical market: Arizona Governor Election Winner (13 markets)
+2026-01-07 03:06:18,978 - polymarket_bot.scanner - INFO - Found hierarchical market: Alabama Governor Election Winner (13 markets)
+2026-01-07 03:06:18,979 - polymarket_bot.scanner - INFO - Found hierarchical market: Arkansas Governor Election Winner (13 markets)
+2026-01-07 03:06:18,979 - polymarket_bot.scanner - INFO - Found hierarchical market: Colorado Governor Election Winner (13 markets)
+2026-01-07 03:06:18,979 - polymarket_bot.scanner - INFO - Found hierarchical market: Connecticut Governor Election Winner (13 markets)
+2026-01-07 03:06:18,979 - polymarket_bot.scanner - INFO - Found hierarchical market: Florida Governor Election Winner (13 markets)
+2026-01-07 03:06:18,980 - polymarket_bot.scanner - INFO - Found hierarchical market: Georgia Governor Election Winner (13 markets)
+2026-01-07 03:06:18,980 - polymarket_bot.scanner - INFO - Found hierarchical market: Hawaii Governor Election Winner (13 markets)
+2026-01-07 03:06:18,980 - polymarket_bot.scanner - INFO - Found hierarchical market: Idaho Governor Election Winner (13 markets)
+2026-01-07 03:06:18,981 - polymarket_bot.scanner - INFO - Found hierarchical market: Illinois Governor Election Winner (13 markets)
+2026-01-07 03:06:18,981 - polymarket_bot.scanner - INFO - Found hierarchical market: Iowa Governor Election Winner (13 markets)
+2026-01-07 03:06:18,981 - polymarket_bot.scanner - INFO - Found hierarchical market: Kansas Governor Election Winner (13 markets)
+2026-01-07 03:06:18,981 - polymarket_bot.scanner - INFO - Found hierarchical market: Maine Governor Election Winner (13 markets)
+2026-01-07 03:06:18,981 - polymarket_bot.scanner - INFO - Found hierarchical market: Maryland Governor Election Winner (13 markets)
+2026-01-07 03:06:18,982 - polymarket_bot.scanner - INFO - Found hierarchical market: Massachusetts Governor Election Winner (13 markets)
+2026-01-07 03:06:18,982 - polymarket_bot.scanner - INFO - Found hierarchical market: Michigan Governor Election Winner (13 markets)
+2026-01-07 03:06:18,982 - polymarket_bot.scanner - INFO - Found hierarchical market: Minnesota Governor Election Winner (13 markets)
+2026-01-07 03:06:18,982 - polymarket_bot.scanner - INFO - Found hierarchical market: Nebraska Governor Election Winner (13 markets)
+2026-01-07 03:06:18,982 - polymarket_bot.scanner - INFO - Found hierarchical market: Nevada Governor Election Winner (13 markets)
+2026-01-07 03:06:18,983 - polymarket_bot.scanner - INFO - Found hierarchical market: New Hampshire Governor Election Winner (13 markets)
+2026-01-07 03:06:18,983 - polymarket_bot.scanner - INFO - Found hierarchical market: New Mexico Governor Election Winner (13 markets)
+2026-01-07 03:06:18,983 - polymarket_bot.scanner - INFO - Found hierarchical market: New York Governor Election Winner (13 markets)
+2026-01-07 03:06:18,983 - polymarket_bot.scanner - INFO - Found hierarchical market: Ohio Governor Election Winner (13 markets)
+2026-01-07 03:06:18,983 - polymarket_bot.scanner - INFO - Found hierarchical market: Oklahoma Governor Election Winner (13 markets)
+2026-01-07 03:06:18,983 - polymarket_bot.scanner - INFO - Found hierarchical market: Oregon Governor Election Winner (13 markets)
+2026-01-07 03:06:18,984 - polymarket_bot.scanner - INFO - Found hierarchical market: Pennsylvania Governor Election Winner (13 markets)
+2026-01-07 03:06:18,984 - polymarket_bot.scanner - INFO - Found hierarchical market: Rhode Island Governor Election Winner (13 markets)
+2026-01-07 03:06:18,984 - polymarket_bot.scanner - INFO - Found hierarchical market: South Carolina Governor Election Winner (13 markets)
+2026-01-07 03:06:18,984 - polymarket_bot.scanner - INFO - Found hierarchical market: South Dakota Governor Election Winner (13 markets)
+2026-01-07 03:06:18,984 - polymarket_bot.scanner - INFO - Found hierarchical market: Tennessee Governor Election Winner (13 markets)
+2026-01-07 03:06:18,984 - polymarket_bot.scanner - INFO - Found hierarchical market: Texas Governor Election Winner (13 markets)
+2026-01-07 03:06:18,984 - polymarket_bot.scanner - INFO - Found hierarchical market: Vermont Governor Election Winner (13 markets)
+2026-01-07 03:06:18,984 - polymarket_bot.scanner - INFO - Found hierarchical market: Wisconsin Governor Election Winner (13 markets)
+2026-01-07 03:06:18,985 - polymarket_bot.scanner - INFO - Found hierarchical market: Wyoming Governor Election Winner (13 markets)
+2026-01-07 03:06:18,990 - polymarket_bot.scanner - INFO - Found hierarchical market: Alaska Governor Election Winner   (40 markets)
+2026-01-07 03:06:18,990 - polymarket_bot.scanner - INFO - Found hierarchical market: Which coalition will form the next Dutch government? (33 markets)
+2026-01-07 03:06:18,991 - polymarket_bot.scanner - INFO - Found hierarchical market: Ink FDV above ___ one day after launch? (4 markets)
+2026-01-07 03:06:18,995 - polymarket_bot.scanner - INFO - Found hierarchical market: NBA Win Totals: Over or Under? (30 markets)
+2026-01-07 03:06:19,000 - polymarket_bot.scanner - INFO - Found hierarchical market: Another crypto hack over $100m by ___? (2 markets)
+2026-01-07 03:06:19,001 - polymarket_bot.scanner - INFO - Total hierarchical markets found: 46
+2026-01-07 03:06:19,015 - polymarket_bot.main - INFO - [OK] Found 590 pairs from 46 hierarchical markets
+2026-01-07 03:06:19,016 - polymarket_bot.main - INFO - [INFO] Total unique tokens: 636
+2026-01-07 03:06:19,016 - polymarket_bot.main - INFO - [CONNECT] Connecting to WebSocket...
+2026-01-07 03:06:19,016 - polymarket_bot.ws_manager - INFO - Connecting to CLOB WebSocket: wss://ws-subscriptions-clob.polymarket.com/ws/market
+2026-01-07 03:06:19,351 - polymarket_bot.ws_manager - INFO - [CONNECT] Connected to CLOB WebSocket
+2026-01-07 03:06:19,363 - polymarket_bot.main - INFO - [CONNECT] Subscribed to 636 tokens
+2026-01-07 03:06:19,364 - polymarket_bot.main - INFO - [RUN] Starting market monitoring loop
+2026-01-07 03:11:19,376 - polymarket_bot.main - INFO - [STATS] Updates: 0 | Opportunities: 0 | Trades: 0 | P&L: $0.00
+2026-01-07 03:16:19,393 - polymarket_bot.main - INFO - [STATS] Updates: 0 | Opportunities: 0 | Trades: 0 | P&L: $0.00
+2026-01-07 03:20:22,626 - polymarket_bot.ws_manager - WARNING - WebSocket connection closed
+2026-01-07 03:21:05,105 - polymarket_bot.main - INFO - 
+[SHUTDOWN] Ctrl+C detected - cleaning up...
+2026-01-07 03:21:05,131 - polymarket_bot.main - INFO - [SHUTDOWN] Shutting down tasks...
+2026-01-07 03:21:05,131 - polymarket_bot.main - INFO - [CLEANUP] Closing connections...
+2026-01-07 03:21:05,131 - polymarket_bot.ws_manager - INFO - WebSocket closed
+2026-01-07 03:21:05,131 - polymarket_bot.persistence - INFO - 
+======================================================================
+2026-01-07 03:21:05,131 - polymarket_bot.persistence - INFO - 📊 PERFORMANCE REPORT
+2026-01-07 03:21:05,131 - polymarket_bot.persistence - INFO - ======================================================================
+2026-01-07 03:21:05,131 - polymarket_bot.persistence - INFO - ⏱️  Session Duration: 0.25 hours
+2026-01-07 03:21:05,132 - polymarket_bot.persistence - INFO - 📈 Price Updates: 0
+2026-01-07 03:21:05,132 - polymarket_bot.persistence - INFO - 🔍 Opportunities Found: 0
+2026-01-07 03:21:05,132 - polymarket_bot.persistence - INFO - 💼 Trades Attempted: 0
+2026-01-07 03:21:05,132 - polymarket_bot.persistence - INFO - ✅ Trades Successful: 0
+2026-01-07 03:21:05,132 - polymarket_bot.persistence - INFO - 💰 Session P&L: $0.00
+2026-01-07 03:21:05,145 - polymarket_bot.persistence - INFO - ======================================================================
+
+2026-01-07 03:21:05,145 - polymarket_bot.main - INFO - [DONE] Bot shutdown complete
+2026-01-07 03:21:09,708 - polymarket_bot.persistence - INFO - 📊 Transaction logger initialized: C:\Users\shh92\OneDrive\Documenti\BotPolymarket\logs\transactions.csv
+2026-01-07 03:21:09,708 - polymarket_bot.main - INFO - 
+============================================================
+2026-01-07 03:21:09,708 - polymarket_bot.main - INFO - [START] POLYMARKET ARBITRAGE BOT
+2026-01-07 03:21:09,708 - polymarket_bot.main - INFO - [TIME] 2026-01-07 03:21:09
+2026-01-07 03:21:09,709 - polymarket_bot.main - INFO - [INFO] Press Ctrl+C to stop
+2026-01-07 03:21:09,709 - polymarket_bot.main - INFO - ============================================================
+
+2026-01-07 03:21:09,709 - polymarket_bot.main - INFO - [SCAN] Searching for hierarchical markets...
+2026-01-07 03:21:09,710 - polymarket_bot.scanner - INFO - Scanning Gamma API: https://gamma-api.polymarket.com/events?active=true&closed=false&limit=500
+2026-01-07 03:21:19,029 - polymarket_bot.scanner - WARNING - Mixed directions in How much spending will DOGE cut in 2025?: {'above', 'below'} - skipping
+2026-01-07 03:21:19,030 - polymarket_bot.scanner - WARNING - Mixed directions in # of federal jobs cut in 2025?: {'above', 'below'} - skipping
+2026-01-07 03:21:19,030 - polymarket_bot.scanner - INFO - Found hierarchical market: Ukraine recognizes Russian sovereignty over its territory by...? (2 markets)
+2026-01-07 03:21:19,030 - polymarket_bot.scanner - INFO - Found hierarchical market: How high will inflation get in 2025? (6 markets)
+2026-01-07 03:21:19,030 - polymarket_bot.scanner - WARNING - Mixed directions in How much revenue will the U.S. raise from tariffs in 2025?: {'above', 'below'} - skipping
+2026-01-07 03:21:19,032 - polymarket_bot.scanner - WARNING - Mixed directions in Harvey Weinstein prison time?: {'above', 'below'} - skipping
+2026-01-07 03:21:19,040 - polymarket_bot.scanner - INFO - Found hierarchical market: Lisa Cook out as Fed Governor by...? (5 markets)
+2026-01-07 03:21:19,040 - polymarket_bot.scanner - WARNING - Mixed directions in Carabao Cup Winner : {'above', 'below'} - skipping
+2026-01-07 03:21:19,041 - polymarket_bot.scanner - INFO - Found hierarchical market: Which Parties will be part of next Government of the Netherlands? (16 markets)
+2026-01-07 03:21:19,043 - polymarket_bot.scanner - WARNING - Mixed directions in December Inflation Argentina - Annual: {'above', 'below'} - skipping
+2026-01-07 03:21:19,047 - polymarket_bot.scanner - INFO - Found hierarchical market: Opensea FDV above ___ one day after launch? (5 markets)
+2026-01-07 03:21:19,047 - polymarket_bot.scanner - INFO - Found hierarchical market: Football.Fun FDV above ___ one day after launch? (6 markets)
+2026-01-07 03:21:19,048 - polymarket_bot.scanner - INFO - Found hierarchical market: California Governor Election Winner (45 markets)
+2026-01-07 03:21:19,049 - polymarket_bot.scanner - INFO - Found hierarchical market: Arizona Governor Election Winner (13 markets)
+2026-01-07 03:21:19,049 - polymarket_bot.scanner - INFO - Found hierarchical market: Alabama Governor Election Winner (13 markets)
+2026-01-07 03:21:19,049 - polymarket_bot.scanner - INFO - Found hierarchical market: Arkansas Governor Election Winner (13 markets)
+2026-01-07 03:21:19,050 - polymarket_bot.scanner - INFO - Found hierarchical market: Colorado Governor Election Winner (13 markets)
+2026-01-07 03:21:19,050 - polymarket_bot.scanner - INFO - Found hierarchical market: Connecticut Governor Election Winner (13 markets)
+2026-01-07 03:21:19,050 - polymarket_bot.scanner - INFO - Found hierarchical market: Florida Governor Election Winner (13 markets)
+2026-01-07 03:21:19,050 - polymarket_bot.scanner - INFO - Found hierarchical market: Georgia Governor Election Winner (13 markets)
+2026-01-07 03:21:19,050 - polymarket_bot.scanner - INFO - Found hierarchical market: Hawaii Governor Election Winner (13 markets)
+2026-01-07 03:21:19,050 - polymarket_bot.scanner - INFO - Found hierarchical market: Idaho Governor Election Winner (13 markets)
+2026-01-07 03:21:19,051 - polymarket_bot.scanner - INFO - Found hierarchical market: Illinois Governor Election Winner (13 markets)
+2026-01-07 03:21:19,051 - polymarket_bot.scanner - INFO - Found hierarchical market: Iowa Governor Election Winner (13 markets)
+2026-01-07 03:21:19,051 - polymarket_bot.scanner - INFO - Found hierarchical market: Kansas Governor Election Winner (13 markets)
+2026-01-07 03:21:19,051 - polymarket_bot.scanner - INFO - Found hierarchical market: Maine Governor Election Winner (13 markets)
+2026-01-07 03:21:19,052 - polymarket_bot.scanner - INFO - Found hierarchical market: Maryland Governor Election Winner (13 markets)
+2026-01-07 03:21:19,052 - polymarket_bot.scanner - INFO - Found hierarchical market: Massachusetts Governor Election Winner (13 markets)
+2026-01-07 03:21:19,052 - polymarket_bot.scanner - INFO - Found hierarchical market: Michigan Governor Election Winner (13 markets)
+2026-01-07 03:21:19,052 - polymarket_bot.scanner - INFO - Found hierarchical market: Minnesota Governor Election Winner (13 markets)
+2026-01-07 03:21:19,052 - polymarket_bot.scanner - INFO - Found hierarchical market: Nebraska Governor Election Winner (13 markets)
+2026-01-07 03:21:19,053 - polymarket_bot.scanner - INFO - Found hierarchical market: Nevada Governor Election Winner (13 markets)
+2026-01-07 03:21:19,053 - polymarket_bot.scanner - INFO - Found hierarchical market: New Hampshire Governor Election Winner (13 markets)
+2026-01-07 03:21:19,053 - polymarket_bot.scanner - INFO - Found hierarchical market: New Mexico Governor Election Winner (13 markets)
+2026-01-07 03:21:19,053 - polymarket_bot.scanner - INFO - Found hierarchical market: New York Governor Election Winner (13 markets)
+2026-01-07 03:21:19,053 - polymarket_bot.scanner - INFO - Found hierarchical market: Ohio Governor Election Winner (13 markets)
+2026-01-07 03:21:19,053 - polymarket_bot.scanner - INFO - Found hierarchical market: Oklahoma Governor Election Winner (13 markets)
+2026-01-07 03:21:19,054 - polymarket_bot.scanner - INFO - Found hierarchical market: Oregon Governor Election Winner (13 markets)
+2026-01-07 03:21:19,054 - polymarket_bot.scanner - INFO - Found hierarchical market: Pennsylvania Governor Election Winner (13 markets)
+2026-01-07 03:21:19,054 - polymarket_bot.scanner - INFO - Found hierarchical market: Rhode Island Governor Election Winner (13 markets)
+2026-01-07 03:21:19,054 - polymarket_bot.scanner - INFO - Found hierarchical market: South Carolina Governor Election Winner (13 markets)
+2026-01-07 03:21:19,054 - polymarket_bot.scanner - INFO - Found hierarchical market: South Dakota Governor Election Winner (13 markets)
+2026-01-07 03:21:19,054 - polymarket_bot.scanner - INFO - Found hierarchical market: Tennessee Governor Election Winner (13 markets)
+2026-01-07 03:21:19,054 - polymarket_bot.scanner - INFO - Found hierarchical market: Texas Governor Election Winner (13 markets)
+2026-01-07 03:21:19,054 - polymarket_bot.scanner - INFO - Found hierarchical market: Vermont Governor Election Winner (13 markets)
+2026-01-07 03:21:19,054 - polymarket_bot.scanner - INFO - Found hierarchical market: Wisconsin Governor Election Winner (13 markets)
+2026-01-07 03:21:19,054 - polymarket_bot.scanner - INFO - Found hierarchical market: Wyoming Governor Election Winner (13 markets)
+2026-01-07 03:21:19,060 - polymarket_bot.scanner - INFO - Found hierarchical market: Alaska Governor Election Winner   (40 markets)
+2026-01-07 03:21:19,060 - polymarket_bot.scanner - INFO - Found hierarchical market: Which coalition will form the next Dutch government? (33 markets)
+2026-01-07 03:21:19,061 - polymarket_bot.scanner - INFO - Found hierarchical market: Ink FDV above ___ one day after launch? (4 markets)
+2026-01-07 03:21:19,065 - polymarket_bot.scanner - INFO - Found hierarchical market: NBA Win Totals: Over or Under? (30 markets)
+2026-01-07 03:21:19,071 - polymarket_bot.scanner - INFO - Found hierarchical market: Another crypto hack over $100m by ___? (2 markets)
+2026-01-07 03:21:19,073 - polymarket_bot.scanner - INFO - Total hierarchical markets found: 46
+2026-01-07 03:21:19,089 - polymarket_bot.main - INFO - [OK] Found 590 pairs from 46 hierarchical markets
+2026-01-07 03:21:19,089 - polymarket_bot.main - INFO - [INFO] Total unique tokens: 636
+2026-01-07 03:21:19,090 - polymarket_bot.main - INFO - [CONNECT] Connecting to WebSocket...
+2026-01-07 03:21:19,090 - polymarket_bot.ws_manager - INFO - Connecting to CLOB WebSocket: wss://ws-subscriptions-clob.polymarket.com/ws/market
+2026-01-07 03:21:19,407 - polymarket_bot.ws_manager - INFO - [CONNECT] Connected to CLOB WebSocket
+2026-01-07 03:21:19,420 - polymarket_bot.main - INFO - [CONNECT] Subscribed to 636 tokens
+2026-01-07 03:21:19,420 - polymarket_bot.main - INFO - [RUN] Starting market monitoring loop
+2026-01-07 03:24:44,376 - polymarket_bot.main - INFO - 
+[SHUTDOWN] Ctrl+C detected - cleaning up...
+2026-01-07 03:24:44,446 - polymarket_bot.main - INFO - [SHUTDOWN] Shutting down tasks...
+2026-01-07 03:24:44,446 - polymarket_bot.ws_manager - INFO - WebSocket receive loop cancelled
+2026-01-07 03:24:44,446 - polymarket_bot.main - INFO - [CLEANUP] Closing connections...
+2026-01-07 03:24:44,513 - polymarket_bot.ws_manager - INFO - WebSocket closed
+2026-01-07 03:24:44,513 - polymarket_bot.persistence - INFO - 
+======================================================================
+2026-01-07 03:24:44,513 - polymarket_bot.persistence - INFO - 📊 PERFORMANCE REPORT
+2026-01-07 03:24:44,513 - polymarket_bot.persistence - INFO - ======================================================================
+2026-01-07 03:24:44,514 - polymarket_bot.persistence - INFO - ⏱️  Session Duration: 0.06 hours
+2026-01-07 03:24:44,514 - polymarket_bot.persistence - INFO - 📈 Price Updates: 0
+2026-01-07 03:24:44,514 - polymarket_bot.persistence - INFO - 🔍 Opportunities Found: 0
+2026-01-07 03:24:44,514 - polymarket_bot.persistence - INFO - 💼 Trades Attempted: 0
+2026-01-07 03:24:44,514 - polymarket_bot.persistence - INFO - ✅ Trades Successful: 0
+2026-01-07 03:24:44,514 - polymarket_bot.persistence - INFO - 💰 Session P&L: $0.00
+2026-01-07 03:24:44,514 - polymarket_bot.persistence - INFO - ======================================================================
+
+2026-01-07 03:24:44,514 - polymarket_bot.main - INFO - [DONE] Bot shutdown complete
+2026-01-07 03:24:59,333 - polymarket_bot.persistence - INFO - 📊 Transaction logger initialized: C:\Users\shh92\OneDrive\Documenti\BotPolymarket\logs\transactions.csv
+2026-01-07 03:24:59,333 - polymarket_bot.main - INFO - 
+============================================================
+2026-01-07 03:24:59,333 - polymarket_bot.main - INFO - [START] POLYMARKET ARBITRAGE BOT
+2026-01-07 03:24:59,334 - polymarket_bot.main - INFO - [TIME] 2026-01-07 03:24:59
+2026-01-07 03:24:59,334 - polymarket_bot.main - INFO - [INFO] Press Ctrl+C to stop
+2026-01-07 03:24:59,334 - polymarket_bot.main - INFO - ============================================================
+
+2026-01-07 03:24:59,334 - polymarket_bot.main - INFO - [SCAN] Searching for hierarchical markets...
+2026-01-07 03:24:59,335 - polymarket_bot.scanner - INFO - Scanning Gamma API: https://gamma-api.polymarket.com/events?active=true&closed=false&limit=500
+2026-01-07 03:25:01,787 - polymarket_bot.scanner - WARNING - Mixed directions in How much spending will DOGE cut in 2025?: {'below', 'above'} - skipping
+2026-01-07 03:25:01,788 - polymarket_bot.scanner - WARNING - Mixed directions in # of federal jobs cut in 2025?: {'below', 'above'} - skipping
+2026-01-07 03:25:01,788 - polymarket_bot.scanner - INFO - Found hierarchical market: Ukraine recognizes Russian sovereignty over its territory by...? (2 markets)
+2026-01-07 03:25:01,788 - polymarket_bot.scanner - INFO - Found hierarchical market: How high will inflation get in 2025? (6 markets)
+2026-01-07 03:25:01,788 - polymarket_bot.scanner - WARNING - Mixed directions in How much revenue will the U.S. raise from tariffs in 2025?: {'below', 'above'} - skipping
+2026-01-07 03:25:01,789 - polymarket_bot.scanner - WARNING - Mixed directions in Harvey Weinstein prison time?: {'below', 'above'} - skipping
+2026-01-07 03:25:01,797 - polymarket_bot.scanner - INFO - Found hierarchical market: Lisa Cook out as Fed Governor by...? (5 markets)
+2026-01-07 03:25:01,798 - polymarket_bot.scanner - WARNING - Mixed directions in Carabao Cup Winner : {'below', 'above'} - skipping
+2026-01-07 03:25:01,799 - polymarket_bot.scanner - INFO - Found hierarchical market: Which Parties will be part of next Government of the Netherlands? (16 markets)
+2026-01-07 03:25:01,801 - polymarket_bot.scanner - WARNING - Mixed directions in December Inflation Argentina - Annual: {'below', 'above'} - skipping
+2026-01-07 03:25:01,804 - polymarket_bot.scanner - INFO - Found hierarchical market: Opensea FDV above ___ one day after launch? (5 markets)
+2026-01-07 03:25:01,804 - polymarket_bot.scanner - INFO - Found hierarchical market: Football.Fun FDV above ___ one day after launch? (6 markets)
+2026-01-07 03:25:01,805 - polymarket_bot.scanner - INFO - Found hierarchical market: California Governor Election Winner (45 markets)
+2026-01-07 03:25:01,806 - polymarket_bot.scanner - INFO - Found hierarchical market: Arizona Governor Election Winner (13 markets)
+2026-01-07 03:25:01,806 - polymarket_bot.scanner - INFO - Found hierarchical market: Alabama Governor Election Winner (13 markets)
+2026-01-07 03:25:01,806 - polymarket_bot.scanner - INFO - Found hierarchical market: Arkansas Governor Election Winner (13 markets)
+2026-01-07 03:25:01,806 - polymarket_bot.scanner - INFO - Found hierarchical market: Colorado Governor Election Winner (13 markets)
+2026-01-07 03:25:01,806 - polymarket_bot.scanner - INFO - Found hierarchical market: Connecticut Governor Election Winner (13 markets)
+2026-01-07 03:25:01,807 - polymarket_bot.scanner - INFO - Found hierarchical market: Florida Governor Election Winner (13 markets)
+2026-01-07 03:25:01,807 - polymarket_bot.scanner - INFO - Found hierarchical market: Georgia Governor Election Winner (13 markets)
+2026-01-07 03:25:01,807 - polymarket_bot.scanner - INFO - Found hierarchical market: Hawaii Governor Election Winner (13 markets)
+2026-01-07 03:25:01,807 - polymarket_bot.scanner - INFO - Found hierarchical market: Idaho Governor Election Winner (13 markets)
+2026-01-07 03:25:01,807 - polymarket_bot.scanner - INFO - Found hierarchical market: Illinois Governor Election Winner (13 markets)
+2026-01-07 03:25:01,807 - polymarket_bot.scanner - INFO - Found hierarchical market: Iowa Governor Election Winner (13 markets)
+2026-01-07 03:25:01,807 - polymarket_bot.scanner - INFO - Found hierarchical market: Kansas Governor Election Winner (13 markets)
+2026-01-07 03:25:01,807 - polymarket_bot.scanner - INFO - Found hierarchical market: Maine Governor Election Winner (13 markets)
+2026-01-07 03:25:01,807 - polymarket_bot.scanner - INFO - Found hierarchical market: Maryland Governor Election Winner (13 markets)
+2026-01-07 03:25:01,807 - polymarket_bot.scanner - INFO - Found hierarchical market: Massachusetts Governor Election Winner (13 markets)
+2026-01-07 03:25:01,807 - polymarket_bot.scanner - INFO - Found hierarchical market: Michigan Governor Election Winner (13 markets)
+2026-01-07 03:25:01,808 - polymarket_bot.scanner - INFO - Found hierarchical market: Minnesota Governor Election Winner (13 markets)
+2026-01-07 03:25:01,808 - polymarket_bot.scanner - INFO - Found hierarchical market: Nebraska Governor Election Winner (13 markets)
+2026-01-07 03:25:01,808 - polymarket_bot.scanner - INFO - Found hierarchical market: Nevada Governor Election Winner (13 markets)
+2026-01-07 03:25:01,808 - polymarket_bot.scanner - INFO - Found hierarchical market: New Hampshire Governor Election Winner (13 markets)
+2026-01-07 03:25:01,808 - polymarket_bot.scanner - INFO - Found hierarchical market: New Mexico Governor Election Winner (13 markets)
+2026-01-07 03:25:01,808 - polymarket_bot.scanner - INFO - Found hierarchical market: New York Governor Election Winner (13 markets)
+2026-01-07 03:25:01,808 - polymarket_bot.scanner - INFO - Found hierarchical market: Ohio Governor Election Winner (13 markets)
+2026-01-07 03:25:01,808 - polymarket_bot.scanner - INFO - Found hierarchical market: Oklahoma Governor Election Winner (13 markets)
+2026-01-07 03:25:01,809 - polymarket_bot.scanner - INFO - Found hierarchical market: Oregon Governor Election Winner (13 markets)
+2026-01-07 03:25:01,809 - polymarket_bot.scanner - INFO - Found hierarchical market: Pennsylvania Governor Election Winner (13 markets)
+2026-01-07 03:25:01,809 - polymarket_bot.scanner - INFO - Found hierarchical market: Rhode Island Governor Election Winner (13 markets)
+2026-01-07 03:25:01,809 - polymarket_bot.scanner - INFO - Found hierarchical market: South Carolina Governor Election Winner (13 markets)
+2026-01-07 03:25:01,810 - polymarket_bot.scanner - INFO - Found hierarchical market: South Dakota Governor Election Winner (13 markets)
+2026-01-07 03:25:01,810 - polymarket_bot.scanner - INFO - Found hierarchical market: Tennessee Governor Election Winner (13 markets)
+2026-01-07 03:25:01,810 - polymarket_bot.scanner - INFO - Found hierarchical market: Texas Governor Election Winner (13 markets)
+2026-01-07 03:25:01,810 - polymarket_bot.scanner - INFO - Found hierarchical market: Vermont Governor Election Winner (13 markets)
+2026-01-07 03:25:01,810 - polymarket_bot.scanner - INFO - Found hierarchical market: Wisconsin Governor Election Winner (13 markets)
+2026-01-07 03:25:01,810 - polymarket_bot.scanner - INFO - Found hierarchical market: Wyoming Governor Election Winner (13 markets)
+2026-01-07 03:25:01,817 - polymarket_bot.scanner - INFO - Found hierarchical market: Alaska Governor Election Winner   (40 markets)
+2026-01-07 03:25:01,817 - polymarket_bot.scanner - INFO - Found hierarchical market: Which coalition will form the next Dutch government? (33 markets)
+2026-01-07 03:25:01,818 - polymarket_bot.scanner - INFO - Found hierarchical market: Ink FDV above ___ one day after launch? (4 markets)
+2026-01-07 03:25:01,821 - polymarket_bot.scanner - INFO - Found hierarchical market: NBA Win Totals: Over or Under? (30 markets)
+2026-01-07 03:25:01,826 - polymarket_bot.scanner - INFO - Found hierarchical market: Another crypto hack over $100m by ___? (2 markets)
+2026-01-07 03:25:01,827 - polymarket_bot.scanner - INFO - Total hierarchical markets found: 46
+2026-01-07 03:25:01,844 - polymarket_bot.main - INFO - [OK] Found 590 pairs from 46 hierarchical markets
+2026-01-07 03:25:01,844 - polymarket_bot.main - INFO - [INFO] Total unique tokens: 636
+2026-01-07 03:25:01,844 - polymarket_bot.main - INFO - [CONNECT] Connecting to WebSocket...
+2026-01-07 03:25:01,844 - polymarket_bot.ws_manager - INFO - Connecting to CLOB WebSocket: wss://ws-subscriptions-clob.polymarket.com/ws/market
+2026-01-07 03:25:02,096 - polymarket_bot.ws_manager - INFO - [CONNECT] Connected to CLOB WebSocket
+2026-01-07 03:25:02,112 - polymarket_bot.main - INFO - [CONNECT] Subscribed to 636 tokens
+2026-01-07 03:25:02,112 - polymarket_bot.main - INFO - [RUN] Starting market monitoring loop
+2026-01-07 03:30:02,127 - polymarket_bot.main - INFO - [STATS] Updates: 0 | Opportunities: 0 | Trades: 0 | P&L: $0.00
+2026-01-07 03:35:02,143 - polymarket_bot.main - INFO - [STATS] Updates: 0 | Opportunities: 0 | Trades: 0 | P&L: $0.00
+2026-01-07 03:36:36,058 - polymarket_bot.main - INFO - 
+[SHUTDOWN] Ctrl+C detected - cleaning up...
+2026-01-07 03:36:36,060 - polymarket_bot.main - INFO - [SHUTDOWN] Shutting down tasks...
+2026-01-07 03:36:36,061 - polymarket_bot.ws_manager - INFO - WebSocket receive loop cancelled
+2026-01-07 03:36:36,062 - polymarket_bot.main - INFO - [CLEANUP] Closing connections...
+2026-01-07 03:36:36,134 - polymarket_bot.ws_manager - INFO - WebSocket closed
+2026-01-07 03:36:36,135 - polymarket_bot.persistence - INFO - 
+======================================================================
+2026-01-07 03:36:36,136 - polymarket_bot.persistence - INFO - 📊 PERFORMANCE REPORT
+2026-01-07 03:36:36,136 - polymarket_bot.persistence - INFO - ======================================================================
+2026-01-07 03:36:36,137 - polymarket_bot.persistence - INFO - ⏱️  Session Duration: 0.19 hours
+2026-01-07 03:36:36,137 - polymarket_bot.persistence - INFO - 📈 Price Updates: 0
+2026-01-07 03:36:36,138 - polymarket_bot.persistence - INFO - 🔍 Opportunities Found: 0
+2026-01-07 03:36:36,138 - polymarket_bot.persistence - INFO - 💼 Trades Attempted: 0
+2026-01-07 03:36:36,139 - polymarket_bot.persistence - INFO - ✅ Trades Successful: 0
+2026-01-07 03:36:36,140 - polymarket_bot.persistence - INFO - 💰 Session P&L: $0.00
+2026-01-07 03:36:36,141 - polymarket_bot.persistence - INFO - ======================================================================
+
+2026-01-07 03:36:36,141 - polymarket_bot.main - INFO - [DONE] Bot shutdown complete
+2026-01-07 03:36:39,474 - polymarket_bot.persistence - INFO - 📊 Transaction logger initialized: C:\Users\shh92\OneDrive\Documenti\BotPolymarket\logs\transactions.csv
+2026-01-07 03:36:39,474 - polymarket_bot.main - INFO - 
+============================================================
+2026-01-07 03:36:39,475 - polymarket_bot.main - INFO - [START] POLYMARKET ARBITRAGE BOT
+2026-01-07 03:36:39,475 - polymarket_bot.main - INFO - [TIME] 2026-01-07 03:36:39
+2026-01-07 03:36:39,475 - polymarket_bot.main - INFO - [INFO] Press Ctrl+C to stop
+2026-01-07 03:36:39,475 - polymarket_bot.main - INFO - ============================================================
+
+2026-01-07 03:36:39,476 - polymarket_bot.main - INFO - [SCAN] Searching for hierarchical markets...
+2026-01-07 03:36:39,477 - polymarket_bot.scanner - INFO - Scanning Gamma API: https://gamma-api.polymarket.com/events?active=true&closed=false&limit=500
+2026-01-07 03:36:41,997 - polymarket_bot.scanner - WARNING - Mixed directions in How much spending will DOGE cut in 2025?: {'above', 'below'} - skipping
+2026-01-07 03:36:41,997 - polymarket_bot.scanner - WARNING - Mixed directions in # of federal jobs cut in 2025?: {'above', 'below'} - skipping
+2026-01-07 03:36:41,997 - polymarket_bot.scanner - INFO - Found hierarchical market: Ukraine recognizes Russian sovereignty over its territory by...? (2 markets)
+2026-01-07 03:36:41,998 - polymarket_bot.scanner - INFO - Found hierarchical market: How high will inflation get in 2025? (6 markets)
+2026-01-07 03:36:41,998 - polymarket_bot.scanner - WARNING - Mixed directions in How much revenue will the U.S. raise from tariffs in 2025?: {'above', 'below'} - skipping
+2026-01-07 03:36:41,999 - polymarket_bot.scanner - WARNING - Mixed directions in Harvey Weinstein prison time?: {'above', 'below'} - skipping
+2026-01-07 03:36:42,008 - polymarket_bot.scanner - INFO - Found hierarchical market: Lisa Cook out as Fed Governor by...? (5 markets)
+2026-01-07 03:36:42,009 - polymarket_bot.scanner - WARNING - Mixed directions in Carabao Cup Winner : {'above', 'below'} - skipping
+2026-01-07 03:36:42,010 - polymarket_bot.scanner - INFO - Found hierarchical market: Which Parties will be part of next Government of the Netherlands? (16 markets)
+2026-01-07 03:36:42,012 - polymarket_bot.scanner - WARNING - Mixed directions in December Inflation Argentina - Annual: {'above', 'below'} - skipping
+2026-01-07 03:36:42,016 - polymarket_bot.scanner - INFO - Found hierarchical market: Opensea FDV above ___ one day after launch? (5 markets)
+2026-01-07 03:36:42,016 - polymarket_bot.scanner - INFO - Found hierarchical market: Football.Fun FDV above ___ one day after launch? (6 markets)
+2026-01-07 03:36:42,017 - polymarket_bot.scanner - INFO - Found hierarchical market: California Governor Election Winner (45 markets)
+2026-01-07 03:36:42,018 - polymarket_bot.scanner - INFO - Found hierarchical market: Arizona Governor Election Winner (13 markets)
+2026-01-07 03:36:42,018 - polymarket_bot.scanner - INFO - Found hierarchical market: Alabama Governor Election Winner (13 markets)
+2026-01-07 03:36:42,019 - polymarket_bot.scanner - INFO - Found hierarchical market: Arkansas Governor Election Winner (13 markets)
+2026-01-07 03:36:42,019 - polymarket_bot.scanner - INFO - Found hierarchical market: Colorado Governor Election Winner (13 markets)
+2026-01-07 03:36:42,020 - polymarket_bot.scanner - INFO - Found hierarchical market: Connecticut Governor Election Winner (13 markets)
+2026-01-07 03:36:42,020 - polymarket_bot.scanner - INFO - Found hierarchical market: Florida Governor Election Winner (13 markets)
+2026-01-07 03:36:42,020 - polymarket_bot.scanner - INFO - Found hierarchical market: Georgia Governor Election Winner (13 markets)
+2026-01-07 03:36:42,021 - polymarket_bot.scanner - INFO - Found hierarchical market: Hawaii Governor Election Winner (13 markets)
+2026-01-07 03:36:42,021 - polymarket_bot.scanner - INFO - Found hierarchical market: Idaho Governor Election Winner (13 markets)
+2026-01-07 03:36:42,021 - polymarket_bot.scanner - INFO - Found hierarchical market: Illinois Governor Election Winner (13 markets)
+2026-01-07 03:36:42,021 - polymarket_bot.scanner - INFO - Found hierarchical market: Iowa Governor Election Winner (13 markets)
+2026-01-07 03:36:42,022 - polymarket_bot.scanner - INFO - Found hierarchical market: Kansas Governor Election Winner (13 markets)
+2026-01-07 03:36:42,022 - polymarket_bot.scanner - INFO - Found hierarchical market: Maine Governor Election Winner (13 markets)
+2026-01-07 03:36:42,022 - polymarket_bot.scanner - INFO - Found hierarchical market: Maryland Governor Election Winner (13 markets)
+2026-01-07 03:36:42,022 - polymarket_bot.scanner - INFO - Found hierarchical market: Massachusetts Governor Election Winner (13 markets)
+2026-01-07 03:36:42,022 - polymarket_bot.scanner - INFO - Found hierarchical market: Michigan Governor Election Winner (13 markets)
+2026-01-07 03:36:42,022 - polymarket_bot.scanner - INFO - Found hierarchical market: Minnesota Governor Election Winner (13 markets)
+2026-01-07 03:36:42,022 - polymarket_bot.scanner - INFO - Found hierarchical market: Nebraska Governor Election Winner (13 markets)
+2026-01-07 03:36:42,023 - polymarket_bot.scanner - INFO - Found hierarchical market: Nevada Governor Election Winner (13 markets)
+2026-01-07 03:36:42,023 - polymarket_bot.scanner - INFO - Found hierarchical market: New Hampshire Governor Election Winner (13 markets)
+2026-01-07 03:36:42,023 - polymarket_bot.scanner - INFO - Found hierarchical market: New Mexico Governor Election Winner (13 markets)
+2026-01-07 03:36:42,023 - polymarket_bot.scanner - INFO - Found hierarchical market: New York Governor Election Winner (13 markets)
+2026-01-07 03:36:42,023 - polymarket_bot.scanner - INFO - Found hierarchical market: Ohio Governor Election Winner (13 markets)
+2026-01-07 03:36:42,024 - polymarket_bot.scanner - INFO - Found hierarchical market: Oklahoma Governor Election Winner (13 markets)
+2026-01-07 03:36:42,024 - polymarket_bot.scanner - INFO - Found hierarchical market: Oregon Governor Election Winner (13 markets)
+2026-01-07 03:36:42,024 - polymarket_bot.scanner - INFO - Found hierarchical market: Pennsylvania Governor Election Winner (13 markets)
+2026-01-07 03:36:42,024 - polymarket_bot.scanner - INFO - Found hierarchical market: Rhode Island Governor Election Winner (13 markets)
+2026-01-07 03:36:42,024 - polymarket_bot.scanner - INFO - Found hierarchical market: South Carolina Governor Election Winner (13 markets)
+2026-01-07 03:36:42,024 - polymarket_bot.scanner - INFO - Found hierarchical market: South Dakota Governor Election Winner (13 markets)
+2026-01-07 03:36:42,024 - polymarket_bot.scanner - INFO - Found hierarchical market: Tennessee Governor Election Winner (13 markets)
+2026-01-07 03:36:42,024 - polymarket_bot.scanner - INFO - Found hierarchical market: Texas Governor Election Winner (13 markets)
+2026-01-07 03:36:42,025 - polymarket_bot.scanner - INFO - Found hierarchical market: Vermont Governor Election Winner (13 markets)
+2026-01-07 03:36:42,025 - polymarket_bot.scanner - INFO - Found hierarchical market: Wisconsin Governor Election Winner (13 markets)
+2026-01-07 03:36:42,025 - polymarket_bot.scanner - INFO - Found hierarchical market: Wyoming Governor Election Winner (13 markets)
+2026-01-07 03:36:42,031 - polymarket_bot.scanner - INFO - Found hierarchical market: Alaska Governor Election Winner   (40 markets)
+2026-01-07 03:36:42,031 - polymarket_bot.scanner - INFO - Found hierarchical market: Which coalition will form the next Dutch government? (33 markets)
+2026-01-07 03:36:42,032 - polymarket_bot.scanner - INFO - Found hierarchical market: Ink FDV above ___ one day after launch? (4 markets)
+2026-01-07 03:36:42,035 - polymarket_bot.scanner - INFO - Found hierarchical market: NBA Win Totals: Over or Under? (30 markets)
+2026-01-07 03:36:42,041 - polymarket_bot.scanner - INFO - Found hierarchical market: Another crypto hack over $100m by ___? (2 markets)
+2026-01-07 03:36:42,042 - polymarket_bot.scanner - INFO - Total hierarchical markets found: 46
+2026-01-07 03:36:42,056 - polymarket_bot.main - INFO - [OK] Found 590 pairs from 46 hierarchical markets
+2026-01-07 03:36:42,056 - polymarket_bot.main - INFO - [INFO] Total unique tokens: 636
+2026-01-07 03:36:42,056 - polymarket_bot.main - INFO - [CONNECT] Connecting to WebSocket...
+2026-01-07 03:36:42,056 - polymarket_bot.ws_manager - INFO - Connecting to CLOB WebSocket: wss://ws-subscriptions-clob.polymarket.com/ws/market
+2026-01-07 03:36:42,395 - polymarket_bot.ws_manager - INFO - [CONNECT] Connected to CLOB WebSocket
+2026-01-07 03:36:42,403 - polymarket_bot.main - INFO - [CONNECT] Subscribed to 636 tokens
+2026-01-07 03:36:42,403 - polymarket_bot.main - INFO - [RUN] Starting market monitoring loop
+2026-01-07 03:41:26,272 - polymarket_bot.main - INFO - 
+[SHUTDOWN] Ctrl+C detected - cleaning up...
+2026-01-07 03:41:26,273 - polymarket_bot.main - INFO - [SHUTDOWN] Shutting down tasks...
+2026-01-07 03:41:26,274 - polymarket_bot.ws_manager - INFO - WebSocket receive loop cancelled
+2026-01-07 03:41:26,275 - polymarket_bot.main - INFO - [CLEANUP] Closing connections...
+2026-01-07 03:41:26,359 - polymarket_bot.ws_manager - INFO - WebSocket closed
+2026-01-07 03:41:26,360 - polymarket_bot.persistence - INFO - 
+======================================================================
+2026-01-07 03:41:26,361 - polymarket_bot.persistence - INFO - 📊 PERFORMANCE REPORT
+2026-01-07 03:41:26,362 - polymarket_bot.persistence - INFO - ======================================================================
+2026-01-07 03:41:26,364 - polymarket_bot.persistence - INFO - ⏱️  Session Duration: 0.08 hours
+2026-01-07 03:41:26,364 - polymarket_bot.persistence - INFO - 📈 Price Updates: 0
+2026-01-07 03:41:26,366 - polymarket_bot.persistence - INFO - 🔍 Opportunities Found: 0
+2026-01-07 03:41:26,367 - polymarket_bot.persistence - INFO - 💼 Trades Attempted: 0
+2026-01-07 03:41:26,367 - polymarket_bot.persistence - INFO - ✅ Trades Successful: 0
+2026-01-07 03:41:26,368 - polymarket_bot.persistence - INFO - 💰 Session P&L: $0.00
+2026-01-07 03:41:26,370 - polymarket_bot.persistence - INFO - ======================================================================
+
+2026-01-07 03:41:26,371 - polymarket_bot.main - INFO - [DONE] Bot shutdown complete
+2026-01-07 03:41:50,210 - polymarket_bot.persistence - INFO - 📊 Transaction logger initialized: C:\Users\shh92\OneDrive\Documenti\BotPolymarket\logs\transactions.csv
+2026-01-07 03:41:50,211 - polymarket_bot.main - INFO - 
+============================================================
+2026-01-07 03:41:50,211 - polymarket_bot.main - INFO - [START] POLYMARKET ARBITRAGE BOT
+2026-01-07 03:41:50,211 - polymarket_bot.main - INFO - [TIME] 2026-01-07 03:41:50
+2026-01-07 03:41:50,212 - polymarket_bot.main - INFO - [INFO] Press Ctrl+C to stop
+2026-01-07 03:41:50,212 - polymarket_bot.main - INFO - ============================================================
+
+2026-01-07 03:41:50,212 - polymarket_bot.main - INFO - [SCAN] Searching for hierarchical markets...
+2026-01-07 03:41:50,215 - polymarket_bot.scanner - INFO - Scanning Gamma API: https://gamma-api.polymarket.com/events?active=true&closed=false&limit=1000 (limit=1000 for wider coverage)
+2026-01-07 03:41:52,982 - polymarket_bot.scanner - WARNING - Mixed directions in How much spending will DOGE cut in 2025?: {'below', 'above'} - skipping
+2026-01-07 03:41:52,983 - polymarket_bot.scanner - WARNING - Mixed directions in # of federal jobs cut in 2025?: {'below', 'above'} - skipping
+2026-01-07 03:41:52,983 - polymarket_bot.scanner - INFO - Found hierarchical market: Ukraine recognizes Russian sovereignty over its territory by...? (2 markets)
+2026-01-07 03:41:52,983 - polymarket_bot.scanner - INFO - Found hierarchical market: How high will inflation get in 2025? (6 markets)
+2026-01-07 03:41:52,984 - polymarket_bot.scanner - WARNING - Mixed directions in How much revenue will the U.S. raise from tariffs in 2025?: {'below', 'above'} - skipping
+2026-01-07 03:41:52,985 - polymarket_bot.scanner - WARNING - Mixed directions in Harvey Weinstein prison time?: {'below', 'above'} - skipping
+2026-01-07 03:41:52,998 - polymarket_bot.scanner - INFO - Found hierarchical market: Lisa Cook out as Fed Governor by...? (5 markets)
+2026-01-07 03:41:52,999 - polymarket_bot.scanner - WARNING - Mixed directions in Carabao Cup Winner : {'below', 'above'} - skipping
+2026-01-07 03:41:53,001 - polymarket_bot.scanner - INFO - Found hierarchical market: Which Parties will be part of next Government of the Netherlands? (16 markets)
+2026-01-07 03:41:53,005 - polymarket_bot.scanner - WARNING - Mixed directions in December Inflation Argentina - Annual: {'below', 'above'} - skipping
+2026-01-07 03:41:53,009 - polymarket_bot.scanner - INFO - Found hierarchical market: Opensea FDV above ___ one day after launch? (5 markets)
+2026-01-07 03:41:53,010 - polymarket_bot.scanner - INFO - Found hierarchical market: Football.Fun FDV above ___ one day after launch? (6 markets)
+2026-01-07 03:41:53,012 - polymarket_bot.scanner - INFO - Found hierarchical market: California Governor Election Winner (45 markets)
+2026-01-07 03:41:53,013 - polymarket_bot.scanner - INFO - Found hierarchical market: Arizona Governor Election Winner (13 markets)
+2026-01-07 03:41:53,013 - polymarket_bot.scanner - INFO - Found hierarchical market: Alabama Governor Election Winner (13 markets)
+2026-01-07 03:41:53,014 - polymarket_bot.scanner - INFO - Found hierarchical market: Arkansas Governor Election Winner (13 markets)
+2026-01-07 03:41:53,014 - polymarket_bot.scanner - INFO - Found hierarchical market: Colorado Governor Election Winner (13 markets)
+2026-01-07 03:41:53,015 - polymarket_bot.scanner - INFO - Found hierarchical market: Connecticut Governor Election Winner (13 markets)
+2026-01-07 03:41:53,015 - polymarket_bot.scanner - INFO - Found hierarchical market: Florida Governor Election Winner (13 markets)
+2026-01-07 03:41:53,016 - polymarket_bot.scanner - INFO - Found hierarchical market: Georgia Governor Election Winner (13 markets)
+2026-01-07 03:41:53,016 - polymarket_bot.scanner - INFO - Found hierarchical market: Hawaii Governor Election Winner (13 markets)
+2026-01-07 03:41:53,016 - polymarket_bot.scanner - INFO - Found hierarchical market: Idaho Governor Election Winner (13 markets)
+2026-01-07 03:41:53,017 - polymarket_bot.scanner - INFO - Found hierarchical market: Illinois Governor Election Winner (13 markets)
+2026-01-07 03:41:53,017 - polymarket_bot.scanner - INFO - Found hierarchical market: Iowa Governor Election Winner (13 markets)
+2026-01-07 03:41:53,018 - polymarket_bot.scanner - INFO - Found hierarchical market: Kansas Governor Election Winner (13 markets)
+2026-01-07 03:41:53,018 - polymarket_bot.scanner - INFO - Found hierarchical market: Maine Governor Election Winner (13 markets)
+2026-01-07 03:41:53,019 - polymarket_bot.scanner - INFO - Found hierarchical market: Maryland Governor Election Winner (13 markets)
+2026-01-07 03:41:53,019 - polymarket_bot.scanner - INFO - Found hierarchical market: Massachusetts Governor Election Winner (13 markets)
+2026-01-07 03:41:53,019 - polymarket_bot.scanner - INFO - Found hierarchical market: Michigan Governor Election Winner (13 markets)
+2026-01-07 03:41:53,020 - polymarket_bot.scanner - INFO - Found hierarchical market: Minnesota Governor Election Winner (13 markets)
+2026-01-07 03:41:53,021 - polymarket_bot.scanner - INFO - Found hierarchical market: Nebraska Governor Election Winner (13 markets)
+2026-01-07 03:41:53,021 - polymarket_bot.scanner - INFO - Found hierarchical market: Nevada Governor Election Winner (13 markets)
+2026-01-07 03:41:53,022 - polymarket_bot.scanner - INFO - Found hierarchical market: New Hampshire Governor Election Winner (13 markets)
+2026-01-07 03:41:53,022 - polymarket_bot.scanner - INFO - Found hierarchical market: New Mexico Governor Election Winner (13 markets)
+2026-01-07 03:41:53,022 - polymarket_bot.scanner - INFO - Found hierarchical market: New York Governor Election Winner (13 markets)
+2026-01-07 03:41:53,023 - polymarket_bot.scanner - INFO - Found hierarchical market: Ohio Governor Election Winner (13 markets)
+2026-01-07 03:41:53,023 - polymarket_bot.scanner - INFO - Found hierarchical market: Oklahoma Governor Election Winner (13 markets)
+2026-01-07 03:41:53,024 - polymarket_bot.scanner - INFO - Found hierarchical market: Oregon Governor Election Winner (13 markets)
+2026-01-07 03:41:53,024 - polymarket_bot.scanner - INFO - Found hierarchical market: Pennsylvania Governor Election Winner (13 markets)
+2026-01-07 03:41:53,024 - polymarket_bot.scanner - INFO - Found hierarchical market: Rhode Island Governor Election Winner (13 markets)
+2026-01-07 03:41:53,025 - polymarket_bot.scanner - INFO - Found hierarchical market: South Carolina Governor Election Winner (13 markets)
+2026-01-07 03:41:53,025 - polymarket_bot.scanner - INFO - Found hierarchical market: South Dakota Governor Election Winner (13 markets)
+2026-01-07 03:41:53,026 - polymarket_bot.scanner - INFO - Found hierarchical market: Tennessee Governor Election Winner (13 markets)
+2026-01-07 03:41:53,026 - polymarket_bot.scanner - INFO - Found hierarchical market: Texas Governor Election Winner (13 markets)
+2026-01-07 03:41:53,026 - polymarket_bot.scanner - INFO - Found hierarchical market: Vermont Governor Election Winner (13 markets)
+2026-01-07 03:41:53,027 - polymarket_bot.scanner - INFO - Found hierarchical market: Wisconsin Governor Election Winner (13 markets)
+2026-01-07 03:41:53,027 - polymarket_bot.scanner - INFO - Found hierarchical market: Wyoming Governor Election Winner (13 markets)
+2026-01-07 03:41:53,035 - polymarket_bot.scanner - INFO - Found hierarchical market: Alaska Governor Election Winner   (40 markets)
+2026-01-07 03:41:53,036 - polymarket_bot.scanner - INFO - Found hierarchical market: Which coalition will form the next Dutch government? (33 markets)
+2026-01-07 03:41:53,037 - polymarket_bot.scanner - INFO - Found hierarchical market: Ink FDV above ___ one day after launch? (4 markets)
+2026-01-07 03:41:53,043 - polymarket_bot.scanner - INFO - Found hierarchical market: NBA Win Totals: Over or Under? (30 markets)
+2026-01-07 03:41:53,050 - polymarket_bot.scanner - INFO - Found hierarchical market: Another crypto hack over $100m by ___? (2 markets)
+2026-01-07 03:41:53,051 - polymarket_bot.scanner - INFO - Total hierarchical markets found: 46
+2026-01-07 03:41:53,068 - polymarket_bot.main - INFO - [OK] Found 590 pairs from 46 hierarchical markets
+2026-01-07 03:41:53,068 - polymarket_bot.main - INFO - [INFO] Total unique tokens: 636
+2026-01-07 03:41:53,069 - polymarket_bot.main - INFO - [CONNECT] Connecting to WebSocket...
+2026-01-07 03:41:53,069 - polymarket_bot.ws_manager - INFO - Connecting to CLOB WebSocket: wss://ws-subscriptions-clob.polymarket.com/ws/market
+2026-01-07 03:41:53,380 - polymarket_bot.ws_manager - INFO - [CONNECT] Connected to CLOB WebSocket
+2026-01-07 03:41:53,391 - polymarket_bot.main - INFO - [CONNECT] Subscribed to 636 tokens
+2026-01-07 03:41:53,391 - polymarket_bot.main - INFO - [RUN] Starting market monitoring loop
+2026-01-07 03:41:53,555 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #1: []
+...
+2026-01-07 03:41:53,571 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #11: INVALID OPERATION...
+2026-01-07 03:41:53,611 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #21: INVALID OPERATION...
+2026-01-07 03:41:53,612 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #31: INVALID OPERATION...
+2026-01-07 03:41:53,612 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #41: INVALID OPERATION...
+2026-01-07 03:41:53,613 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #51: INVALID OPERATION...
+2026-01-07 03:41:53,657 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #61: INVALID OPERATION...
+2026-01-07 03:41:53,665 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #71: INVALID OPERATION...
+2026-01-07 03:41:53,673 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #81: INVALID OPERATION...
+2026-01-07 03:41:53,679 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #91: INVALID OPERATION...
+2026-01-07 03:41:53,714 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #101: INVALID OPERATION...
+2026-01-07 03:41:53,715 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #111: INVALID OPERATION...
+2026-01-07 03:41:53,716 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #121: INVALID OPERATION...
+2026-01-07 03:41:53,716 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #131: INVALID OPERATION...
+2026-01-07 03:41:53,717 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #141: INVALID OPERATION...
+2026-01-07 03:41:53,719 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #151: INVALID OPERATION...
+2026-01-07 03:41:53,731 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #161: INVALID OPERATION...
+2026-01-07 03:41:53,736 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #171: INVALID OPERATION...
+2026-01-07 03:41:53,741 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #181: INVALID OPERATION...
+2026-01-07 03:41:53,749 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #191: INVALID OPERATION...
+2026-01-07 03:41:53,758 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #201: INVALID OPERATION...
+2026-01-07 03:41:53,772 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #211: INVALID OPERATION...
+2026-01-07 03:41:53,772 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #221: INVALID OPERATION...
+2026-01-07 03:41:53,779 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #231: INVALID OPERATION...
+2026-01-07 03:41:53,787 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #241: INVALID OPERATION...
+2026-01-07 03:41:53,794 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #251: INVALID OPERATION...
+2026-01-07 03:41:53,799 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #261: INVALID OPERATION...
+2026-01-07 03:41:53,807 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #271: INVALID OPERATION...
+2026-01-07 03:41:53,815 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #281: INVALID OPERATION...
+2026-01-07 03:41:53,820 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #291: INVALID OPERATION...
+2026-01-07 03:41:53,828 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #301: INVALID OPERATION...
+2026-01-07 03:41:53,836 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #311: INVALID OPERATION...
+2026-01-07 03:41:53,844 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #321: INVALID OPERATION...
+2026-01-07 03:41:53,848 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #331: INVALID OPERATION...
+2026-01-07 03:41:53,856 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #341: INVALID OPERATION...
+2026-01-07 03:41:53,865 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #351: INVALID OPERATION...
+2026-01-07 03:41:53,869 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #361: INVALID OPERATION...
+2026-01-07 03:41:53,877 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #371: INVALID OPERATION...
+2026-01-07 03:41:53,887 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #381: INVALID OPERATION...
+2026-01-07 03:41:53,894 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #391: INVALID OPERATION...
+2026-01-07 03:41:53,898 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #401: INVALID OPERATION...
+2026-01-07 03:41:53,909 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #411: INVALID OPERATION...
+2026-01-07 03:41:53,915 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #421: INVALID OPERATION...
+2026-01-07 03:41:53,926 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #431: INVALID OPERATION...
+2026-01-07 03:41:53,928 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #441: INVALID OPERATION...
+2026-01-07 03:41:53,936 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #451: INVALID OPERATION...
+2026-01-07 03:41:53,944 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #461: INVALID OPERATION...
+2026-01-07 03:41:53,948 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #471: INVALID OPERATION...
+2026-01-07 03:41:53,956 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #481: INVALID OPERATION...
+2026-01-07 03:41:53,966 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #491: INVALID OPERATION...
+2026-01-07 03:41:53,972 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #501: INVALID OPERATION...
+2026-01-07 03:41:53,977 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #511: INVALID OPERATION...
+2026-01-07 03:41:53,986 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #521: INVALID OPERATION...
+2026-01-07 03:41:53,995 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #531: INVALID OPERATION...
+2026-01-07 03:41:53,998 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #541: INVALID OPERATION...
+2026-01-07 03:41:54,008 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #551: INVALID OPERATION...
+2026-01-07 03:41:54,013 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #561: INVALID OPERATION...
+2026-01-07 03:41:54,023 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #571: INVALID OPERATION...
+2026-01-07 03:41:54,030 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #581: INVALID OPERATION...
+2026-01-07 03:41:54,051 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #591: INVALID OPERATION...
+2026-01-07 03:41:54,051 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #601: INVALID OPERATION...
+2026-01-07 03:41:54,052 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #611: INVALID OPERATION...
+2026-01-07 03:41:54,062 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #621: INVALID OPERATION...
+2026-01-07 03:41:54,067 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #631: INVALID OPERATION...
+2026-01-07 03:42:45,678 - polymarket_bot.main - INFO - 
+[SHUTDOWN] Ctrl+C detected - cleaning up...
+2026-01-07 03:42:45,679 - polymarket_bot.main - INFO - [SHUTDOWN] Shutting down tasks...
+2026-01-07 03:42:45,679 - polymarket_bot.ws_manager - INFO - WebSocket receive loop cancelled
+2026-01-07 03:42:45,680 - polymarket_bot.main - INFO - [CLEANUP] Closing connections...
+2026-01-07 03:42:45,752 - polymarket_bot.ws_manager - INFO - WebSocket closed
+2026-01-07 03:42:45,753 - polymarket_bot.persistence - INFO - 
+======================================================================
+2026-01-07 03:42:45,753 - polymarket_bot.persistence - INFO - 📊 PERFORMANCE REPORT
+2026-01-07 03:42:45,754 - polymarket_bot.persistence - INFO - ======================================================================
+2026-01-07 03:42:45,755 - polymarket_bot.persistence - INFO - ⏱️  Session Duration: 0.02 hours
+2026-01-07 03:42:45,755 - polymarket_bot.persistence - INFO - 📈 Price Updates: 0
+2026-01-07 03:42:45,756 - polymarket_bot.persistence - INFO - 🔍 Opportunities Found: 0
+2026-01-07 03:42:45,757 - polymarket_bot.persistence - INFO - 💼 Trades Attempted: 0
+2026-01-07 03:42:45,757 - polymarket_bot.persistence - INFO - ✅ Trades Successful: 0
+2026-01-07 03:42:45,757 - polymarket_bot.persistence - INFO - 💰 Session P&L: $0.00
+2026-01-07 03:42:45,759 - polymarket_bot.persistence - INFO - ======================================================================
+
+2026-01-07 03:42:45,759 - polymarket_bot.main - INFO - [DONE] Bot shutdown complete
+2026-01-07 03:42:57,436 - polymarket_bot.persistence - INFO - 📊 Transaction logger initialized: C:\Users\shh92\OneDrive\Documenti\BotPolymarket\logs\transactions.csv
+2026-01-07 03:42:57,437 - polymarket_bot.main - INFO - 
+============================================================
+2026-01-07 03:42:57,438 - polymarket_bot.main - INFO - [START] POLYMARKET ARBITRAGE BOT
+2026-01-07 03:42:57,438 - polymarket_bot.main - INFO - [TIME] 2026-01-07 03:42:57
+2026-01-07 03:42:57,439 - polymarket_bot.main - INFO - [INFO] Press Ctrl+C to stop
+2026-01-07 03:42:57,439 - polymarket_bot.main - INFO - ============================================================
+
+2026-01-07 03:42:57,439 - polymarket_bot.main - INFO - [SCAN] Searching for hierarchical markets...
+2026-01-07 03:42:57,441 - polymarket_bot.scanner - INFO - Scanning Gamma API: https://gamma-api.polymarket.com/events?active=true&closed=false&limit=1000 (limit=1000 for wider coverage)
+2026-01-07 03:43:09,100 - polymarket_bot.scanner - WARNING - Mixed directions in How much spending will DOGE cut in 2025?: {'above', 'below'} - skipping
+2026-01-07 03:43:09,101 - polymarket_bot.scanner - WARNING - Mixed directions in # of federal jobs cut in 2025?: {'above', 'below'} - skipping
+2026-01-07 03:43:09,101 - polymarket_bot.scanner - INFO - Found hierarchical market: Ukraine recognizes Russian sovereignty over its territory by...? (2 markets)
+2026-01-07 03:43:09,101 - polymarket_bot.scanner - INFO - Found hierarchical market: How high will inflation get in 2025? (6 markets)
+2026-01-07 03:43:09,102 - polymarket_bot.scanner - WARNING - Mixed directions in How much revenue will the U.S. raise from tariffs in 2025?: {'above', 'below'} - skipping
+2026-01-07 03:43:09,103 - polymarket_bot.scanner - WARNING - Mixed directions in Harvey Weinstein prison time?: {'above', 'below'} - skipping
+2026-01-07 03:43:09,114 - polymarket_bot.scanner - INFO - Found hierarchical market: Lisa Cook out as Fed Governor by...? (5 markets)
+2026-01-07 03:43:09,115 - polymarket_bot.scanner - WARNING - Mixed directions in Carabao Cup Winner : {'above', 'below'} - skipping
+2026-01-07 03:43:09,117 - polymarket_bot.scanner - INFO - Found hierarchical market: Which Parties will be part of next Government of the Netherlands? (16 markets)
+2026-01-07 03:43:09,119 - polymarket_bot.scanner - WARNING - Mixed directions in December Inflation Argentina - Annual: {'above', 'below'} - skipping
+2026-01-07 03:43:09,124 - polymarket_bot.scanner - INFO - Found hierarchical market: Opensea FDV above ___ one day after launch? (5 markets)
+2026-01-07 03:43:09,125 - polymarket_bot.scanner - INFO - Found hierarchical market: Football.Fun FDV above ___ one day after launch? (6 markets)
+2026-01-07 03:43:09,127 - polymarket_bot.scanner - INFO - Found hierarchical market: California Governor Election Winner (45 markets)
+2026-01-07 03:43:09,128 - polymarket_bot.scanner - INFO - Found hierarchical market: Arizona Governor Election Winner (13 markets)
+2026-01-07 03:43:09,129 - polymarket_bot.scanner - INFO - Found hierarchical market: Alabama Governor Election Winner (13 markets)
+2026-01-07 03:43:09,130 - polymarket_bot.scanner - INFO - Found hierarchical market: Arkansas Governor Election Winner (13 markets)
+2026-01-07 03:43:09,131 - polymarket_bot.scanner - INFO - Found hierarchical market: Colorado Governor Election Winner (13 markets)
+2026-01-07 03:43:09,132 - polymarket_bot.scanner - INFO - Found hierarchical market: Connecticut Governor Election Winner (13 markets)
+2026-01-07 03:43:09,132 - polymarket_bot.scanner - INFO - Found hierarchical market: Florida Governor Election Winner (13 markets)
+2026-01-07 03:43:09,133 - polymarket_bot.scanner - INFO - Found hierarchical market: Georgia Governor Election Winner (13 markets)
+2026-01-07 03:43:09,133 - polymarket_bot.scanner - INFO - Found hierarchical market: Hawaii Governor Election Winner (13 markets)
+2026-01-07 03:43:09,134 - polymarket_bot.scanner - INFO - Found hierarchical market: Idaho Governor Election Winner (13 markets)
+2026-01-07 03:43:09,134 - polymarket_bot.scanner - INFO - Found hierarchical market: Illinois Governor Election Winner (13 markets)
+2026-01-07 03:43:09,134 - polymarket_bot.scanner - INFO - Found hierarchical market: Iowa Governor Election Winner (13 markets)
+2026-01-07 03:43:09,135 - polymarket_bot.scanner - INFO - Found hierarchical market: Kansas Governor Election Winner (13 markets)
+2026-01-07 03:43:09,135 - polymarket_bot.scanner - INFO - Found hierarchical market: Maine Governor Election Winner (13 markets)
+2026-01-07 03:43:09,136 - polymarket_bot.scanner - INFO - Found hierarchical market: Maryland Governor Election Winner (13 markets)
+2026-01-07 03:43:09,136 - polymarket_bot.scanner - INFO - Found hierarchical market: Massachusetts Governor Election Winner (13 markets)
+2026-01-07 03:43:09,137 - polymarket_bot.scanner - INFO - Found hierarchical market: Michigan Governor Election Winner (13 markets)
+2026-01-07 03:43:09,137 - polymarket_bot.scanner - INFO - Found hierarchical market: Minnesota Governor Election Winner (13 markets)
+2026-01-07 03:43:09,137 - polymarket_bot.scanner - INFO - Found hierarchical market: Nebraska Governor Election Winner (13 markets)
+2026-01-07 03:43:09,138 - polymarket_bot.scanner - INFO - Found hierarchical market: Nevada Governor Election Winner (13 markets)
+2026-01-07 03:43:09,138 - polymarket_bot.scanner - INFO - Found hierarchical market: New Hampshire Governor Election Winner (13 markets)
+2026-01-07 03:43:09,139 - polymarket_bot.scanner - INFO - Found hierarchical market: New Mexico Governor Election Winner (13 markets)
+2026-01-07 03:43:09,139 - polymarket_bot.scanner - INFO - Found hierarchical market: New York Governor Election Winner (13 markets)
+2026-01-07 03:43:09,139 - polymarket_bot.scanner - INFO - Found hierarchical market: Ohio Governor Election Winner (13 markets)
+2026-01-07 03:43:09,139 - polymarket_bot.scanner - INFO - Found hierarchical market: Oklahoma Governor Election Winner (13 markets)
+2026-01-07 03:43:09,140 - polymarket_bot.scanner - INFO - Found hierarchical market: Oregon Governor Election Winner (13 markets)
+2026-01-07 03:43:09,140 - polymarket_bot.scanner - INFO - Found hierarchical market: Pennsylvania Governor Election Winner (13 markets)
+2026-01-07 03:43:09,141 - polymarket_bot.scanner - INFO - Found hierarchical market: Rhode Island Governor Election Winner (13 markets)
+2026-01-07 03:43:09,141 - polymarket_bot.scanner - INFO - Found hierarchical market: South Carolina Governor Election Winner (13 markets)
+2026-01-07 03:43:09,141 - polymarket_bot.scanner - INFO - Found hierarchical market: South Dakota Governor Election Winner (13 markets)
+2026-01-07 03:43:09,142 - polymarket_bot.scanner - INFO - Found hierarchical market: Tennessee Governor Election Winner (13 markets)
+2026-01-07 03:43:09,142 - polymarket_bot.scanner - INFO - Found hierarchical market: Texas Governor Election Winner (13 markets)
+2026-01-07 03:43:09,143 - polymarket_bot.scanner - INFO - Found hierarchical market: Vermont Governor Election Winner (13 markets)
+2026-01-07 03:43:09,143 - polymarket_bot.scanner - INFO - Found hierarchical market: Wisconsin Governor Election Winner (13 markets)
+2026-01-07 03:43:09,144 - polymarket_bot.scanner - INFO - Found hierarchical market: Wyoming Governor Election Winner (13 markets)
+2026-01-07 03:43:09,151 - polymarket_bot.scanner - INFO - Found hierarchical market: Alaska Governor Election Winner   (40 markets)
+2026-01-07 03:43:09,152 - polymarket_bot.scanner - INFO - Found hierarchical market: Which coalition will form the next Dutch government? (33 markets)
+2026-01-07 03:43:09,153 - polymarket_bot.scanner - INFO - Found hierarchical market: Ink FDV above ___ one day after launch? (4 markets)
+2026-01-07 03:43:09,161 - polymarket_bot.scanner - INFO - Found hierarchical market: NBA Win Totals: Over or Under? (30 markets)
+2026-01-07 03:43:09,170 - polymarket_bot.scanner - INFO - Found hierarchical market: Another crypto hack over $100m by ___? (2 markets)
+2026-01-07 03:43:09,172 - polymarket_bot.scanner - INFO - Total hierarchical markets found: 46
+2026-01-07 03:43:09,191 - polymarket_bot.main - INFO - [OK] Found 590 pairs from 46 hierarchical markets
+2026-01-07 03:43:09,192 - polymarket_bot.main - INFO - [INFO] Total unique tokens: 636
+2026-01-07 03:43:09,192 - polymarket_bot.main - INFO - [CONNECT] Connecting to WebSocket...
+2026-01-07 03:43:09,193 - polymarket_bot.ws_manager - INFO - Connecting to CLOB WebSocket: wss://ws-subscriptions-clob.polymarket.com/ws/market
+2026-01-07 03:43:09,506 - polymarket_bot.ws_manager - INFO - [CONNECT] Connected to CLOB WebSocket
+2026-01-07 03:43:09,522 - polymarket_bot.ws_manager - INFO - Successfully subscribed to 636/636 tokens
+2026-01-07 03:43:09,523 - polymarket_bot.main - INFO - [CONNECT] Subscribed to 636 tokens
+2026-01-07 03:43:09,523 - polymarket_bot.main - INFO - [RUN] Starting market monitoring loop
+2026-01-07 03:43:09,593 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #1: INVALID OPERATION...
+2026-01-07 03:43:09,596 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #11: INVALID OPERATION...
+2026-01-07 03:43:09,657 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #21: INVALID OPERATION...
+2026-01-07 03:43:09,658 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #31: INVALID OPERATION...
+2026-01-07 03:43:09,658 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #41: INVALID OPERATION...
+2026-01-07 03:43:09,659 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #51: INVALID OPERATION...
+2026-01-07 03:43:09,660 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #61: INVALID OPERATION...
+2026-01-07 03:43:09,660 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #71: INVALID OPERATION...
+2026-01-07 03:43:09,661 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #81: INVALID OPERATION...
+2026-01-07 03:43:09,663 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #91: INVALID OPERATION...
+2026-01-07 03:43:09,664 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #101: INVALID OPERATION...
+2026-01-07 03:43:09,671 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #111: INVALID OPERATION...
+2026-01-07 03:43:09,720 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #121: INVALID OPERATION...
+2026-01-07 03:43:09,721 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #131: INVALID OPERATION...
+2026-01-07 03:43:09,722 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #141: INVALID OPERATION...
+2026-01-07 03:43:09,723 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #151: INVALID OPERATION...
+2026-01-07 03:43:09,724 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #161: INVALID OPERATION...
+2026-01-07 03:43:09,725 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #171: INVALID OPERATION...
+2026-01-07 03:43:09,726 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #181: INVALID OPERATION...
+2026-01-07 03:43:09,732 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #191: INVALID OPERATION...
+2026-01-07 03:43:09,739 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #201: INVALID OPERATION...
+2026-01-07 03:43:09,744 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #211: INVALID OPERATION...
+2026-01-07 03:43:09,758 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #221: INVALID OPERATION...
+2026-01-07 03:43:09,761 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #231: INVALID OPERATION...
+2026-01-07 03:43:09,765 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #241: INVALID OPERATION...
+2026-01-07 03:43:09,774 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #251: INVALID OPERATION...
+2026-01-07 03:43:09,783 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #261: INVALID OPERATION...
+2026-01-07 03:43:09,791 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #271: INVALID OPERATION...
+2026-01-07 03:43:09,798 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #281: INVALID OPERATION...
+2026-01-07 03:43:09,802 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #291: INVALID OPERATION...
+2026-01-07 03:43:09,810 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #301: INVALID OPERATION...
+2026-01-07 03:43:09,820 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #311: INVALID OPERATION...
+2026-01-07 03:43:09,827 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #321: INVALID OPERATION...
+2026-01-07 03:43:09,831 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #331: INVALID OPERATION...
+2026-01-07 03:43:09,841 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #341: INVALID OPERATION...
+2026-01-07 03:43:09,849 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #351: INVALID OPERATION...
+2026-01-07 03:43:09,857 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #361: INVALID OPERATION...
+2026-01-07 03:43:09,865 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #371: INVALID OPERATION...
+2026-01-07 03:43:09,870 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #381: INVALID OPERATION...
+2026-01-07 03:43:09,879 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #391: INVALID OPERATION...
+2026-01-07 03:43:09,888 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #401: INVALID OPERATION...
+2026-01-07 03:43:09,893 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #411: INVALID OPERATION...
+2026-01-07 03:43:09,898 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #421: INVALID OPERATION...
+2026-01-07 03:43:09,908 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #431: INVALID OPERATION...
+2026-01-07 03:43:09,914 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #441: INVALID OPERATION...
+2026-01-07 03:43:09,923 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #451: INVALID OPERATION...
+2026-01-07 03:43:09,930 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #461: INVALID OPERATION...
+2026-01-07 03:43:09,935 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #471: INVALID OPERATION...
+2026-01-07 03:43:09,943 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #481: INVALID OPERATION...
+2026-01-07 03:43:09,958 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #491: INVALID OPERATION...
+2026-01-07 03:43:09,961 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #501: INVALID OPERATION...
+2026-01-07 03:43:09,963 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #511: INVALID OPERATION...
+2026-01-07 03:43:09,972 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #521: INVALID OPERATION...
+2026-01-07 03:43:09,981 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #531: INVALID OPERATION...
+2026-01-07 03:43:09,993 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #541: INVALID OPERATION...
+2026-01-07 03:43:10,006 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #551: INVALID OPERATION...
+2026-01-07 03:43:10,012 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #561: INVALID OPERATION...
+2026-01-07 03:43:10,018 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #571: INVALID OPERATION...
+2026-01-07 03:43:10,023 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #581: INVALID OPERATION...
+2026-01-07 03:43:10,031 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #591: INVALID OPERATION...
+2026-01-07 03:43:10,040 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #601: INVALID OPERATION...
+2026-01-07 03:43:10,045 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #611: INVALID OPERATION...
+2026-01-07 03:43:10,046 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #621: INVALID OPERATION...
+2026-01-07 03:43:10,055 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #631: INVALID OPERATION...
+2026-01-07 03:45:48,703 - polymarket_bot.main - INFO - 
+[SHUTDOWN] Ctrl+C detected - cleaning up...
+2026-01-07 03:45:48,748 - polymarket_bot.main - INFO - [SHUTDOWN] Shutting down tasks...
+2026-01-07 03:45:48,750 - polymarket_bot.ws_manager - INFO - WebSocket receive loop cancelled
+2026-01-07 03:45:48,751 - polymarket_bot.main - INFO - [CLEANUP] Closing connections...
+2026-01-07 03:45:48,826 - polymarket_bot.ws_manager - INFO - WebSocket closed
+2026-01-07 03:45:48,826 - polymarket_bot.persistence - INFO - 
+======================================================================
+2026-01-07 03:45:48,827 - polymarket_bot.persistence - INFO - 📊 PERFORMANCE REPORT
+2026-01-07 03:45:48,827 - polymarket_bot.persistence - INFO - ======================================================================
+2026-01-07 03:45:48,827 - polymarket_bot.persistence - INFO - ⏱️  Session Duration: 0.05 hours
+2026-01-07 03:45:48,827 - polymarket_bot.persistence - INFO - 📈 Price Updates: 0
+2026-01-07 03:45:48,827 - polymarket_bot.persistence - INFO - 🔍 Opportunities Found: 0
+2026-01-07 03:45:48,827 - polymarket_bot.persistence - INFO - 💼 Trades Attempted: 0
+2026-01-07 03:45:48,828 - polymarket_bot.persistence - INFO - ✅ Trades Successful: 0
+2026-01-07 03:45:48,828 - polymarket_bot.persistence - INFO - 💰 Session P&L: $0.00
+2026-01-07 03:45:48,828 - polymarket_bot.persistence - INFO - ======================================================================
+
+2026-01-07 03:45:48,829 - polymarket_bot.main - INFO - [DONE] Bot shutdown complete
+2026-01-07 03:46:43,490 - polymarket_bot.persistence - INFO - 📊 Transaction logger initialized: C:\Users\shh92\OneDrive\Documenti\BotPolymarket\logs\transactions.csv
+2026-01-07 03:46:43,491 - polymarket_bot.main - INFO - 
+============================================================
+2026-01-07 03:46:43,492 - polymarket_bot.main - INFO - [START] POLYMARKET ARBITRAGE BOT
+2026-01-07 03:46:43,492 - polymarket_bot.main - INFO - [TIME] 2026-01-07 03:46:43
+2026-01-07 03:46:43,493 - polymarket_bot.main - INFO - [INFO] Press Ctrl+C to stop
+2026-01-07 03:46:43,493 - polymarket_bot.main - INFO - ============================================================
+
+2026-01-07 03:46:43,493 - polymarket_bot.main - INFO - [SCAN] Searching for hierarchical markets...
+2026-01-07 03:46:43,495 - polymarket_bot.scanner - INFO - Scanning Gamma API: https://gamma-api.polymarket.com/events?active=true&closed=false&limit=1000 (limit=1000 for wider coverage)
+2026-01-07 03:46:46,174 - polymarket_bot.scanner - WARNING - Mixed directions in How much spending will DOGE cut in 2025?: {'below', 'above'} - skipping
+2026-01-07 03:46:46,175 - polymarket_bot.scanner - WARNING - Mixed directions in # of federal jobs cut in 2025?: {'below', 'above'} - skipping
+2026-01-07 03:46:46,175 - polymarket_bot.scanner - INFO - Found hierarchical market: Ukraine recognizes Russian sovereignty over its territory by...? (2 markets)
+2026-01-07 03:46:46,176 - polymarket_bot.scanner - INFO - Found hierarchical market: How high will inflation get in 2025? (6 markets)
+2026-01-07 03:46:46,177 - polymarket_bot.scanner - WARNING - Mixed directions in How much revenue will the U.S. raise from tariffs in 2025?: {'below', 'above'} - skipping
+2026-01-07 03:46:46,179 - polymarket_bot.scanner - WARNING - Mixed directions in Harvey Weinstein prison time?: {'below', 'above'} - skipping
+2026-01-07 03:46:46,190 - polymarket_bot.scanner - INFO - Found hierarchical market: Lisa Cook out as Fed Governor by...? (5 markets)
+2026-01-07 03:46:46,191 - polymarket_bot.scanner - WARNING - Mixed directions in Carabao Cup Winner : {'below', 'above'} - skipping
+2026-01-07 03:46:46,194 - polymarket_bot.scanner - INFO - Found hierarchical market: Which Parties will be part of next Government of the Netherlands? (16 markets)
+2026-01-07 03:46:46,197 - polymarket_bot.scanner - WARNING - Mixed directions in December Inflation Argentina - Annual: {'below', 'above'} - skipping
+2026-01-07 03:46:46,202 - polymarket_bot.scanner - INFO - Found hierarchical market: Opensea FDV above ___ one day after launch? (5 markets)
+2026-01-07 03:46:46,203 - polymarket_bot.scanner - INFO - Found hierarchical market: Football.Fun FDV above ___ one day after launch? (6 markets)
+2026-01-07 03:46:46,205 - polymarket_bot.scanner - INFO - Found hierarchical market: California Governor Election Winner (45 markets)
+2026-01-07 03:46:46,206 - polymarket_bot.scanner - INFO - Found hierarchical market: Arizona Governor Election Winner (13 markets)
+2026-01-07 03:46:46,206 - polymarket_bot.scanner - INFO - Found hierarchical market: Alabama Governor Election Winner (13 markets)
+2026-01-07 03:46:46,207 - polymarket_bot.scanner - INFO - Found hierarchical market: Arkansas Governor Election Winner (13 markets)
+2026-01-07 03:46:46,207 - polymarket_bot.scanner - INFO - Found hierarchical market: Colorado Governor Election Winner (13 markets)
+2026-01-07 03:46:46,207 - polymarket_bot.scanner - INFO - Found hierarchical market: Connecticut Governor Election Winner (13 markets)
+2026-01-07 03:46:46,208 - polymarket_bot.scanner - INFO - Found hierarchical market: Florida Governor Election Winner (13 markets)
+2026-01-07 03:46:46,208 - polymarket_bot.scanner - INFO - Found hierarchical market: Georgia Governor Election Winner (13 markets)
+2026-01-07 03:46:46,209 - polymarket_bot.scanner - INFO - Found hierarchical market: Hawaii Governor Election Winner (13 markets)
+2026-01-07 03:46:46,209 - polymarket_bot.scanner - INFO - Found hierarchical market: Idaho Governor Election Winner (13 markets)
+2026-01-07 03:46:46,209 - polymarket_bot.scanner - INFO - Found hierarchical market: Illinois Governor Election Winner (13 markets)
+2026-01-07 03:46:46,210 - polymarket_bot.scanner - INFO - Found hierarchical market: Iowa Governor Election Winner (13 markets)
+2026-01-07 03:46:46,210 - polymarket_bot.scanner - INFO - Found hierarchical market: Kansas Governor Election Winner (13 markets)
+2026-01-07 03:46:46,210 - polymarket_bot.scanner - INFO - Found hierarchical market: Maine Governor Election Winner (13 markets)
+2026-01-07 03:46:46,211 - polymarket_bot.scanner - INFO - Found hierarchical market: Maryland Governor Election Winner (13 markets)
+2026-01-07 03:46:46,211 - polymarket_bot.scanner - INFO - Found hierarchical market: Massachusetts Governor Election Winner (13 markets)
+2026-01-07 03:46:46,211 - polymarket_bot.scanner - INFO - Found hierarchical market: Michigan Governor Election Winner (13 markets)
+2026-01-07 03:46:46,211 - polymarket_bot.scanner - INFO - Found hierarchical market: Minnesota Governor Election Winner (13 markets)
+2026-01-07 03:46:46,212 - polymarket_bot.scanner - INFO - Found hierarchical market: Nebraska Governor Election Winner (13 markets)
+2026-01-07 03:46:46,212 - polymarket_bot.scanner - INFO - Found hierarchical market: Nevada Governor Election Winner (13 markets)
+2026-01-07 03:46:46,212 - polymarket_bot.scanner - INFO - Found hierarchical market: New Hampshire Governor Election Winner (13 markets)
+2026-01-07 03:46:46,213 - polymarket_bot.scanner - INFO - Found hierarchical market: New Mexico Governor Election Winner (13 markets)
+2026-01-07 03:46:46,213 - polymarket_bot.scanner - INFO - Found hierarchical market: New York Governor Election Winner (13 markets)
+2026-01-07 03:46:46,213 - polymarket_bot.scanner - INFO - Found hierarchical market: Ohio Governor Election Winner (13 markets)
+2026-01-07 03:46:46,214 - polymarket_bot.scanner - INFO - Found hierarchical market: Oklahoma Governor Election Winner (13 markets)
+2026-01-07 03:46:46,214 - polymarket_bot.scanner - INFO - Found hierarchical market: Oregon Governor Election Winner (13 markets)
+2026-01-07 03:46:46,214 - polymarket_bot.scanner - INFO - Found hierarchical market: Pennsylvania Governor Election Winner (13 markets)
+2026-01-07 03:46:46,215 - polymarket_bot.scanner - INFO - Found hierarchical market: Rhode Island Governor Election Winner (13 markets)
+2026-01-07 03:46:46,215 - polymarket_bot.scanner - INFO - Found hierarchical market: South Carolina Governor Election Winner (13 markets)
+2026-01-07 03:46:46,215 - polymarket_bot.scanner - INFO - Found hierarchical market: South Dakota Governor Election Winner (13 markets)
+2026-01-07 03:46:46,216 - polymarket_bot.scanner - INFO - Found hierarchical market: Tennessee Governor Election Winner (13 markets)
+2026-01-07 03:46:46,216 - polymarket_bot.scanner - INFO - Found hierarchical market: Texas Governor Election Winner (13 markets)
+2026-01-07 03:46:46,217 - polymarket_bot.scanner - INFO - Found hierarchical market: Vermont Governor Election Winner (13 markets)
+2026-01-07 03:46:46,217 - polymarket_bot.scanner - INFO - Found hierarchical market: Wisconsin Governor Election Winner (13 markets)
+2026-01-07 03:46:46,217 - polymarket_bot.scanner - INFO - Found hierarchical market: Wyoming Governor Election Winner (13 markets)
+2026-01-07 03:46:46,225 - polymarket_bot.scanner - INFO - Found hierarchical market: Alaska Governor Election Winner   (40 markets)
+2026-01-07 03:46:46,226 - polymarket_bot.scanner - INFO - Found hierarchical market: Which coalition will form the next Dutch government? (33 markets)
+2026-01-07 03:46:46,227 - polymarket_bot.scanner - INFO - Found hierarchical market: Ink FDV above ___ one day after launch? (4 markets)
+2026-01-07 03:46:46,232 - polymarket_bot.scanner - INFO - Found hierarchical market: NBA Win Totals: Over or Under? (30 markets)
+2026-01-07 03:46:46,239 - polymarket_bot.scanner - INFO - Found hierarchical market: Another crypto hack over $100m by ___? (2 markets)
+2026-01-07 03:46:46,241 - polymarket_bot.scanner - INFO - Total hierarchical markets found: 46
+2026-01-07 03:46:46,261 - polymarket_bot.main - INFO - [OK] Found 590 pairs from 46 hierarchical markets
+2026-01-07 03:46:46,262 - polymarket_bot.main - INFO - [INFO] Total unique tokens: 636
+2026-01-07 03:46:46,262 - polymarket_bot.main - INFO - [CONNECT] Connecting to WebSocket...
+2026-01-07 03:46:46,263 - polymarket_bot.ws_manager - INFO - Connecting to CLOB WebSocket: wss://ws-subscriptions-clob.polymarket.com/ws/market
+2026-01-07 03:46:46,592 - polymarket_bot.ws_manager - INFO - [CONNECT] Connected to CLOB WebSocket
+2026-01-07 03:46:46,594 - polymarket_bot.ws_manager - INFO - Successfully subscribed to 636 tokens
+2026-01-07 03:46:46,594 - polymarket_bot.main - INFO - [CONNECT] Subscribed to 636 tokens
+2026-01-07 03:46:46,595 - polymarket_bot.main - INFO - [RUN] Starting market monitoring loop
+2026-01-07 03:46:47,009 - polymarket_bot.ws_manager - INFO - [WS_DEBUG] Received message #1: []
+...
+2026-01-07 03:47:02,027 - polymarket_bot.main - INFO - 
+[SHUTDOWN] Ctrl+C detected - cleaning up...
+2026-01-07 03:47:02,060 - polymarket_bot.main - INFO - [SHUTDOWN] Shutting down tasks...
+2026-01-07 03:47:02,062 - polymarket_bot.ws_manager - INFO - WebSocket receive loop cancelled
+2026-01-07 03:47:02,063 - polymarket_bot.main - INFO - [CLEANUP] Closing connections...
+2026-01-07 03:47:02,138 - polymarket_bot.ws_manager - INFO - WebSocket closed
+2026-01-07 03:47:02,139 - polymarket_bot.persistence - INFO - 
+======================================================================
+2026-01-07 03:47:02,140 - polymarket_bot.persistence - INFO - 📊 PERFORMANCE REPORT
+2026-01-07 03:47:02,141 - polymarket_bot.persistence - INFO - ======================================================================
+2026-01-07 03:47:02,142 - polymarket_bot.persistence - INFO - ⏱️  Session Duration: 0.01 hours
+2026-01-07 03:47:02,142 - polymarket_bot.persistence - INFO - 📈 Price Updates: 0
+2026-01-07 03:47:02,143 - polymarket_bot.persistence - INFO - 🔍 Opportunities Found: 0
+2026-01-07 03:47:02,144 - polymarket_bot.persistence - INFO - 💼 Trades Attempted: 0
+2026-01-07 03:47:02,145 - polymarket_bot.persistence - INFO - ✅ Trades Successful: 0
+2026-01-07 03:47:02,146 - polymarket_bot.persistence - INFO - 💰 Session P&L: $0.00
+2026-01-07 03:47:02,147 - polymarket_bot.persistence - INFO - ======================================================================
+
+2026-01-07 03:47:02,148 - polymarket_bot.main - INFO - [DONE] Bot shutdown complete
