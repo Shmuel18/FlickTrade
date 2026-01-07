@@ -124,9 +124,63 @@ class OrderExecutor:
             logger.error(f"❌ Execution failed: {e}")
             return None
 
-    def execute_arbitrage(self, opportunity: Dict[str, Any], order_size: float) -> bool:
-        """ביצוע שתי רגלי הארביטראז'."""
-        logger.info(f"🔍 Starting Arbitrage: {opportunity['event']}")
+    def check_liquidity(self, opportunity: Dict[str, Any], shares_leg1: float, shares_leg2: float) -> Dict[str, Any]:
+        """בדיקת נזילות - וידוא שיש מספיק מניות זמינות לקנייה בשני הצדדים."""
+        try:
+            # מציאת NO token של רגל 2
+            all_tokens = opportunity.get('hard_condition_all_tokens', [])
+            yes_token = opportunity.get('hard_condition_id')
+            no_token_id = next((t for x in all_tokens for t in (x if isinstance(x, list) else [x]) if t != yes_token), None)
+            
+            if not no_token_id:
+                return {'success': False, 'reason': 'NO token not found'}
+            
+            # בדיקת order book לרגל 1 (Easy YES)
+            try:
+                orderbook_leg1 = self.client.get_order_book(opportunity['easy_condition_id'])
+                if not orderbook_leg1 or 'asks' not in orderbook_leg1:
+                    return {'success': False, 'reason': 'No orderbook data for leg 1'}
+                
+                # חישוב נזילות זמינה ברגל 1
+                available_leg1 = sum(float(ask['size']) for ask in orderbook_leg1.get('asks', [])[:5])  # 5 הצעות הטובות ביותר
+                
+                if available_leg1 < shares_leg1 * 0.8:  # דורש לפחות 80% מהכמות
+                    return {
+                        'success': False, 
+                        'reason': f'Leg 1: need {shares_leg1:.2f}, available {available_leg1:.2f}'
+                    }
+            except Exception as e:
+                # אם אין גישה ל-orderbook, נניח שיש נזילות (fallback)
+                logger.warning(f"Could not check leg 1 orderbook: {e}")
+            
+            # בדיקת order book לרגל 2 (Hard NO)
+            try:
+                orderbook_leg2 = self.client.get_order_book(no_token_id)
+                if not orderbook_leg2 or 'asks' not in orderbook_leg2:
+                    return {'success': False, 'reason': 'No orderbook data for leg 2'}
+                
+                # חישוב נזילות זמינה ברגל 2
+                available_leg2 = sum(float(ask['size']) for ask in orderbook_leg2.get('asks', [])[:5])
+                
+                if available_leg2 < shares_leg2 * 0.8:  # דורש לפחות 80% מהכמות
+                    return {
+                        'success': False,
+                        'reason': f'Leg 2: need {shares_leg2:.2f}, available {available_leg2:.2f}'
+                    }
+            except Exception as e:
+                # אם אין גישה ל-orderbook, נניח שיש נזילות (fallback)
+                logger.warning(f"Could not check leg 2 orderbook: {e}")
+            
+            return {'success': True, 'reason': 'Sufficient liquidity in both legs'}
+            
+        except Exception as e:
+            # במקרה של שגיאה, נאפשר את העסקה (optimistic approach)
+            logger.warning(f"Liquidity check failed: {e} - proceeding anyway")
+            return {'success': True, 'reason': 'Check failed, proceeding optimistically'}
+
+    def execute_arbitrage(self, opportunity: Dict[str, Any], shares_leg1: float, shares_leg2: float) -> bool:
+        """ביצוע שתי רגלי הארביטראז' עם גידור."""
+        logger.info(f"🔍 Starting Hedged Arbitrage: {opportunity['event']}")
         
         all_tokens = opportunity.get('hard_condition_all_tokens', [])
         yes_token = opportunity.get('hard_condition_id')
@@ -137,11 +191,11 @@ class OrderExecutor:
             return False
 
         # רגל 1: קנה YES על התנאי הקל (easy)
-        # Slippage: 0.3% (במקום 1% - יותר סביר)
+        # Slippage: 0.3%
         res1 = self.execute_trade(
             opportunity['easy_condition_id'], 
             'buy', 
-            order_size, 
+            shares_leg1, 
             opportunity['easy_price'] * 1.003
         )
         if not res1: 
@@ -154,7 +208,7 @@ class OrderExecutor:
         res2 = self.execute_trade(
             no_token_id, 
             'buy', 
-            order_size, 
+            shares_leg2, 
             (1 - opportunity['hard_price']) * 1.003
         )
         if not res2:
@@ -166,7 +220,8 @@ class OrderExecutor:
         self.open_positions[position_id] = {
             'event': opportunity['event'],
             'tokens': [opportunity['easy_condition_id'], no_token_id],
-            'size': order_size,
+            'size_leg1': shares_leg1,
+            'size_leg2': shares_leg2,
             'timestamp': __import__('time').time()
         }
         logger.info(f"📝 Position saved: {position_id}")
