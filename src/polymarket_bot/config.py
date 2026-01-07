@@ -35,12 +35,16 @@ CHAIN_ID = 137  # Polygon (MATIC)
 # Trading Configuration
 PROFIT_THRESHOLD = 0.02  # 2% minimum profit threshold
 MAX_USDC_ALLOCATION = 0.05  # Max 5% of balance per trade
+SLIPPAGE_TOLERANCE = 0.01  # Max 1% slippage tolerance
+MIN_LIQUIDITY = 100  # Minimum $100 liquidity at target price
+STOP_LOSS_PERCENT = 0.05  # 5% stop loss on failed leg
 MAX_RETRIES = 3
 RETRY_DELAY = 2  # seconds
 WS_PING_INTERVAL = 20
 WS_PING_TIMEOUT = 20
 API_RATE_LIMIT_DELAY = 1  # seconds between API calls
 MARKET_SCAN_INTERVAL = 3600  # 1 hour in seconds
+ORDER_TIMEOUT = 30  # seconds to wait for order confirmation
 
 # Logging Configuration
 log_file = Path(__file__).parent.parent.parent / "logs" / "polymarket_bot.log"
