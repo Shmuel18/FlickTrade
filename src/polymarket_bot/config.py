@@ -44,8 +44,10 @@ MAX_RETRIES = 3
 RETRY_DELAY = 2
 
 # Strategy Configuration (Single Source of Truth)
-BUY_PRICE_THRESHOLD = 0.20  # Maximum price to buy (20 cents)
-SELL_MULTIPLIER = 2.0       # Sell at 2x entry price
+BUY_PRICE_THRESHOLD = 0.004  # Maximum price to buy ($0.004 = 0.4 cents)
+SELL_MULTIPLIER = 2.0        # Sell at 2x entry price ($0.008 = 0.8 cents)
+PORTFOLIO_PERCENT = 0.005    # 0.5% of portfolio per trade
+MIN_POSITION_USD = 1.0       # Minimum $1 per trade
 WS_PING_INTERVAL = 20
 WS_PING_TIMEOUT = 20
 API_RATE_LIMIT_DELAY = 1

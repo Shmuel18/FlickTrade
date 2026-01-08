@@ -17,7 +17,7 @@ class SimpleTrader:
         token_id = opportunity["token_id"]
         if token_id in self.open_positions: return False
         
-        price = opportunity["current_price"]
+        price = opportunity.get("price") or opportunity.get("current_price", 0)
         
         # הגנה קריטית נגד חלוקה באפס (WinError/ZeroDivision)
         if price <= 0:
@@ -27,7 +27,9 @@ class SimpleTrader:
         shares = int(self.position_size_usd / price)
         if shares < 5: return False
         
-        logger.info(f"🎯 קונה {shares} יחידות של {opportunity['outcome']} ב-שוק: {opportunity['event_title'][:40]}...")
+        question = opportunity.get('question') or opportunity.get('event_title', 'Unknown')
+        side = opportunity.get('side') or opportunity.get('outcome', '?')
+        logger.info(f"🎯 קונה {shares} יחידות של {side} ב-שוק: {question[:40]}...")
         
         # ביצוע הקנייה
         order_result = self.executor.execute_trade(

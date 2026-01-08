@@ -17,7 +17,8 @@ opportunities = scan_extreme_price_markets(
     min_hours_until_close=1,
     low_price_threshold=BUY_PRICE_THRESHOLD,
     focus_crypto=False,
-    max_price_checks=30  # רק 30 כדי שיהיה מהר
+    max_price_checks=100,  # יותר בדיקות
+    verbose_rejections=True
 )
 
 print(f"\n{'='*70}")

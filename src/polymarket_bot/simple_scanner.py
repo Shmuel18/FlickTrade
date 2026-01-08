@@ -12,22 +12,24 @@ def scan_extreme_price_markets(
     min_hours_until_close: int = 0,
     low_price_threshold: float = 0.01,
     focus_crypto: bool = False,
-    max_price_checks: int = 500  # מגביל כמה שווקים לבדוק (למנוע timeouts)
+    max_price_checks: int = 5000,  # הגדלנו ל-5000
+    verbose_rejections: bool = True  # לוגים מפורטים למה נפסל
 ) -> List[Dict]:
     """סורק מהיר של כל השווקים (עם פאג'ינציה) למציאת מחירים נמוכים."""
     try:
-        # שליפת כל השווקים הפעילים עם פאג'ינציה
         markets = []
         offset = 0
         limit = 500
-        max_markets = 3000  # הגבלה כדי לא לקחת יותר מדי זמן
+        max_markets = 1500  # מקסימום שווקים מ-/markets
         
-        logger.info(f"🔍 סורק את כל השווקים בפולימרקט (עם פאג'ינציה)...")
+        # שלב 1: מושך markets ישירות
+        logger.info(f"🔍 סורק את כל השווקים בפולימרקט...")
+        logger.info(f"   📂 שלב 1: מושך markets ישירות...")
         
         while len(markets) < max_markets:
             url = f"{GAMMA_API_URL}/markets?active=true&closed=false&limit={limit}&offset={offset}"
             
-            response = requests.get(url, timeout=15)
+            response = requests.get(url, timeout=30)
             response.raise_for_status()
             batch = response.json()
             
@@ -35,14 +37,57 @@ def scan_extreme_price_markets(
                 break
             
             markets.extend(batch)
-            logger.info(f"   📥 נמשכו {len(batch)} שווקים (סה\"כ: {len(markets)})")
             
             if len(batch) < limit:
                 break
             
             offset += limit
         
-        logger.info(f"✅ סה\"כ נמשכו {len(markets)} שווקים")
+        logger.info(f"   ├─ מ-/markets: {len(markets)} שווקים")
+        
+        # שלב 2: מושך events ומוציא markets מתוכם
+        logger.info(f"   📂 שלב 2: מושך events עם markets מוטמעים...")
+        
+        events_offset = 0
+        events_count = 0
+        markets_from_events = 0
+        seen_condition_ids = set(m.get("conditionId") for m in markets if m.get("conditionId"))
+        
+        while events_offset < 3000:  # מקסימום 3000 events (כדי לתפוס את Bitcoin above שנמצא ב-offset 2000+)
+            events_url = f"{GAMMA_API_URL}/events?active=true&closed=false&limit={limit}&offset={events_offset}"
+            
+            try:
+                events_response = requests.get(events_url, timeout=30)
+                events_response.raise_for_status()
+                events_batch = events_response.json()
+                
+                if not events_batch or len(events_batch) == 0:
+                    break
+                
+                events_count += len(events_batch)
+                
+                # מוציא markets מתוך events
+                for event in events_batch:
+                    event_markets = event.get("markets", [])
+                    for m in event_markets:
+                        # רק אם לא ראינו כבר את השוק הזה
+                        condition_id = m.get("conditionId")
+                        if condition_id and condition_id not in seen_condition_ids:
+                            seen_condition_ids.add(condition_id)
+                            markets.append(m)
+                            markets_from_events += 1
+                
+                if len(events_batch) < limit:
+                    break
+                
+                events_offset += limit
+                
+            except Exception as e:
+                logger.debug(f"   ⚠️ שגיאה במשיכת events: {e}")
+                break
+        
+        logger.info(f"   ├─ מ-/events: {markets_from_events} שווקים חדשים (מתוך {events_count} events)")
+        logger.info(f"   └─ סה\"כ: {len(markets)} שווקים ייחודיים")
         
         # סטטיסטיקות לדיבוג
         stats = {
@@ -53,7 +98,14 @@ def scan_extreme_price_markets(
             "price_fetch_success": 0,
             "price_fetch_fail": 0,
             "prices_seen": [],
-            "num_below_threshold": 0
+            "num_below_threshold": 0,
+            # סיבות פסילה
+            "rejected_inactive": 0,
+            "rejected_no_keyword": 0,
+            "rejected_no_enddate": 0,
+            "rejected_closing_soon": 0,
+            "rejected_no_tokens": 0,
+            "rejected_bad_tokens": 0
         }
         
         opportunities = []
@@ -64,94 +116,106 @@ def scan_extreme_price_markets(
         debug_samples = []
         
         for m in markets:
+            question = m.get("question", "")
+            question_lower = question.lower()
+            
             # בדיקת תקינות בסיסית
-            if not m.get("active") or m.get("closed"): continue
+            if not m.get("active") or m.get("closed"):
+                stats["rejected_inactive"] += 1
+                if verbose_rejections and stats["rejected_inactive"] <= 3:
+                    logger.debug(f"   ⏭️ נפסל (לא פעיל/סגור): {question[:50]}")
+                continue
             stats["after_active_filter"] += 1
             
             # סינון קריפטו אם מבוקש
-            question = m.get("question", "").lower()
             if focus_crypto:
                 crypto_keywords = ["bitcoin", "btc", "$btc", "ethereum", "eth", "$eth", 
                                  "crypto", "cryptocurrency", "sol", "solana"]
-                if not any(kw in question for kw in crypto_keywords):
+                if not any(kw in question_lower for kw in crypto_keywords):
+                    stats["rejected_no_keyword"] += 1
+                    if verbose_rejections and stats["rejected_no_keyword"] <= 3:
+                        logger.debug(f"   ⏭️ נפסל (לא קריפטו): {question[:50]}")
                     continue
             
             # בדיקת זמן סגירה
             end_date_str = m.get("endDate")
-            if not end_date_str: continue
+            if not end_date_str:
+                stats["rejected_no_enddate"] += 1
+                if verbose_rejections and stats["rejected_no_enddate"] <= 3:
+                    logger.debug(f"   ⏭️ נפסל (אין תאריך סגירה): {question[:50]}")
+                continue
+            
             try:
                 end_date = datetime.fromisoformat(end_date_str.replace('Z', '+00:00'))
                 hours_until_close = (end_date - now).total_seconds() / 3600
-                if end_date < min_close_time: continue
+                if end_date < min_close_time:
+                    stats["rejected_closing_soon"] += 1
+                    if verbose_rejections and stats["rejected_closing_soon"] <= 3:
+                        logger.debug(f"   ⏭️ נפסל (נסגר בקרוב - {hours_until_close:.1f}h): {question[:50]}")
+                    continue
                 stats["after_time_filter"] += 1
-            except: continue
+            except:
+                stats["rejected_no_enddate"] += 1
+                continue
 
             # בדיקת tokens
             token_ids = m.get("clobTokenIds")
-            if not token_ids: continue
+            if not token_ids:
+                stats["rejected_no_tokens"] += 1
+                if verbose_rejections and stats["rejected_no_tokens"] <= 3:
+                    logger.debug(f"   ⏭️ נפסל (אין clobTokenIds): {question[:50]}")
+                continue
             
             import json
             if isinstance(token_ids, str):
                 try:
                     token_ids = json.loads(token_ids)
                 except:
+                    stats["rejected_bad_tokens"] += 1
                     continue
             
-            if not token_ids or len(token_ids) < 2: continue
+            if not token_ids or len(token_ids) < 2:
+                stats["rejected_bad_tokens"] += 1
+                if verbose_rejections and stats["rejected_bad_tokens"] <= 3:
+                    logger.debug(f"   ⏭️ נפסל (tokens לא תקינים): {question[:50]}")
+                continue
             stats["after_tradable_filter"] += 1
             
-            # הגבלת מספר בדיקות מחיר כדי לא להיתקע
+            # הגבלת מספר בדיקות מחיר - רק אם הגענו ל-max
             if stats["price_fetch_success"] >= max_price_checks:
+                logger.info(f"⚠️ הגעתי למקסימום {max_price_checks} בדיקות מחיר, עוצר")
                 break
             
-            # כאן הבעיה: outcomePrices זה לא best_ask!
-            # זה last price או mid price - לא מה שאנחנו באמת יכולים לקנות בו
+            # שלב 1: סינון מהיר לפי outcomePrices (לא קוראים ל-CLOB לכולם)
             outcome_prices_gamma = m.get("outcomePrices", [])
+            if isinstance(outcome_prices_gamma, str):
+                import json as json_module
+                try:
+                    outcome_prices_gamma = json_module.loads(outcome_prices_gamma)
+                except:
+                    outcome_prices_gamma = []
             
-            # מושך מחיר רק פעם אחת - של YES (index 0)
-            # ומשם מחשבים את NO
+            # בודקים אם יש מחיר זול לפי outcomePrices (סינון ראשוני)
+            has_cheap_gamma_price = False
+            for p in outcome_prices_gamma:
+                try:
+                    if 0.0001 <= float(p) <= low_price_threshold:
+                        has_cheap_gamma_price = True
+                        break
+                except:
+                    pass
+            
+            if not has_cheap_gamma_price:
+                continue  # דילוג - אין טעם לקרוא ל-CLOB
+            
+            # שלב 2: רק לשווקים עם מחיר זול פוטנציאלי - משתמשים ב-outcomePrices ישירות
+            # (כדי לא להאט את הסורק עם קריאות CLOB)
             try:
                 yes_token_id = token_ids[0]
                 no_token_id = token_ids[1] if len(token_ids) > 1 else None
                 
-                # קריאה ל-CLOB לקבלת best_ask של YES
-                book_url = f"https://clob.polymarket.com/book?token_id={yes_token_id}"
-                book_response = requests.get(book_url, timeout=3)
-                
-                if book_response.status_code != 200:
-                    stats["price_fetch_fail"] += 1
-                    continue
-                
-                book = book_response.json()
-                asks = book.get("asks", [])
-                
-                if not asks or len(asks) == 0:
-                    stats["price_fetch_fail"] += 1
-                    continue
-                
-                # best_ask של YES
-                yes_price = float(asks[0].get("price", 0))
-                
-                if yes_price <= 0:
-                    stats["price_fetch_fail"] += 1
-                    continue
-                
-                # המחיר של NO הוא ההפך (במקרה אידיאלי)
-                # אבל בפועל צריך למשוך גם את order book של NO
-                # כי יכול להיות spread
-                no_price = 1.0 - yes_price  # זה מחיר משוער
-                
-                if no_token_id:
-                    try:
-                        no_book_url = f"https://clob.polymarket.com/book?token_id={no_token_id}"
-                        no_book_response = requests.get(no_book_url, timeout=3)
-                        if no_book_response.status_code == 200:
-                            no_book = no_book_response.json()
-                            no_asks = no_book.get("asks", [])
-                            if no_asks and len(no_asks) > 0:
-                                no_price = float(no_asks[0].get("price", no_price))
-                    except:
-                        pass  # נשאר עם המחיר המשוער
+                yes_price = float(outcome_prices_gamma[0]) if len(outcome_prices_gamma) > 0 else 0
+                no_price = float(outcome_prices_gamma[1]) if len(outcome_prices_gamma) > 1 else 0
                 
                 stats["price_fetch_success"] += 1
                 stats["prices_seen"].append(yes_price)
@@ -174,28 +238,30 @@ def scan_extreme_price_markets(
                 if 0.0001 <= yes_price <= low_price_threshold:
                     stats["num_below_threshold"] += 1
                     opportunities.append({
-                        "event_title": m.get("question", "Unknown"),
-                        "market_question": m.get("question", "Unknown"),
-                        "outcome": "YES",
-                        "current_price": yes_price,
+                        "question": m.get("question", "Unknown"),
+                        "side": "YES",
+                        "price": yes_price,
                         "token_id": yes_token_id,
-                        "hours_until_close": round(hours_until_close, 1)
+                        "hours_until_close": round(hours_until_close, 1),
+                        "condition_id": m.get("conditionId")
                     })
                 
                 # בדיקה 2: NO מתחת ל-threshold
                 if no_token_id and 0.0001 <= no_price <= low_price_threshold:
                     stats["num_below_threshold"] += 1
                     opportunities.append({
-                        "event_title": m.get("question", "Unknown"),
-                        "market_question": m.get("question", "Unknown"),
-                        "outcome": "NO",
-                        "current_price": no_price,
+                        "question": m.get("question", "Unknown"),
+                        "side": "NO",
+                        "price": no_price,
                         "token_id": no_token_id,
-                        "hours_until_close": round(hours_until_close, 1)
+                        "hours_until_close": round(hours_until_close, 1),
+                        "condition_id": m.get("conditionId")
                     })
                     
             except Exception as e:
                 stats["price_fetch_fail"] += 1
+                if verbose_rejections and stats["price_fetch_fail"] <= 3:
+                    logger.debug(f"   ⏭️ נפסל (שגיאת מחיר): {question[:40]} - {str(e)[:30]}")
                 continue
         
         # הדפסת סטטיסטיקות מפורטות
@@ -207,17 +273,27 @@ def scan_extreme_price_markets(
         logger.info(f"   └─ After tradable filter: {stats['after_tradable_filter']}")
         logger.info(f"   Price fetches: ✅ {stats['price_fetch_success']} | ❌ {stats['price_fetch_fail']}")
         
+        # הדפסת סיבות פסילה
+        logger.info(f"\n📋 סיבות פסילה:")
+        logger.info(f"   ├─ לא פעיל/סגור: {stats['rejected_inactive']}")
+        if focus_crypto:
+            logger.info(f"   ├─ לא קריפטו: {stats['rejected_no_keyword']}")
+        logger.info(f"   ├─ אין תאריך סגירה: {stats['rejected_no_enddate']}")
+        logger.info(f"   ├─ נסגר בקרוב: {stats['rejected_closing_soon']}")
+        logger.info(f"   ├─ אין tokens: {stats['rejected_no_tokens']}")
+        logger.info(f"   └─ tokens לא תקינים: {stats['rejected_bad_tokens']}")
+        
         if stats["prices_seen"]:
             import statistics
             prices = sorted(stats["prices_seen"])
-            logger.info(f"   Prices distribution:")
+            logger.info(f"\n📈 התפלגות מחירים:")
             logger.info(f"   ├─ Min: ${min(prices):.4f}")
             logger.info(f"   ├─ P10: ${prices[len(prices)//10]:.4f}")
             logger.info(f"   ├─ Median: ${statistics.median(prices):.4f}")
             logger.info(f"   ├─ P90: ${prices[len(prices)*9//10]:.4f}")
             logger.info(f"   └─ Max: ${max(prices):.4f}")
         
-        logger.info(f"   Below threshold (${low_price_threshold}): {stats['num_below_threshold']}")
+        logger.info(f"\n🎯 Below threshold (${low_price_threshold}): {stats['num_below_threshold']}")
         logger.info(f"{'='*70}\n")
         
         # הדפסת דוגמאות - תמיד!
@@ -235,7 +311,7 @@ def scan_extreme_price_markets(
             logger.info(f"🎯 נמצאו {len(opportunities)} הזדמנויות במחיר של ${low_price_threshold} ומטה!")
             # מדפיס את כל ההזדמנויות (לא רק 5 ראשונות)
             for opp in opportunities[:20]:  # מגביל ל-20 בלוגים
-                logger.info(f"  • {opp['event_title'][:60]} | {opp['outcome']} @ ${opp['current_price']:.4f}")
+                logger.info(f"  • {opp['question'][:60]} | {opp['side']} @ ${opp['price']:.4f}")
             if len(opportunities) > 20:
                 logger.info(f"  ... ועוד {len(opportunities) - 20} הזדמנויות נוספות")
         else:
